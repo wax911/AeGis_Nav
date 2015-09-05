@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AeGiS_App/AeGiS_App.iml" filepath="$PROJECT_DIR$/AeGiS_App/AeGiS_App.iml" />
       <module fileurl="file://$PROJECT_DIR$/AeGis_Nav.iml" filepath="$PROJECT_DIR$/AeGis_Nav.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
 </project>
