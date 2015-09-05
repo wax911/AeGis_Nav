@@ -93,7 +93,7 @@ public class MainActivity extends ActionBarActivity implements androidhive.info.
                 title = getString(R.string.title_messages);
                 break;
             case 3:
-                fragment =  new androidhive.info.aegis.activity.WifiFragment();
+                fragment =  new WifiFragment();
                 title = getString(R.string.title_activity_wifi);
                 break;
             default:

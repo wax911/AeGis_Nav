@@ -1,6 +1,8 @@
 package androidhive.info.aegis.activity;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -50,6 +52,21 @@ import androidhive.info.materialdesign.R;
         Button b ;
         View myView ;
         private final Handler handler = new Handler();
+
+        @Override
+        public void onDestroyView() {
+
+            if (this != null) {
+                //android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.remove(this);
+                fragmentTransaction.commit();
+
+            }
+
+            super.onDestroyView();
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -229,6 +246,8 @@ import androidhive.info.materialdesign.R;
             context.registerReceiver(receiverWifi, new IntentFilter( WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
             super.onResume();
         }
+
+
 
         class WifiReceiver extends BroadcastReceiver
         {
