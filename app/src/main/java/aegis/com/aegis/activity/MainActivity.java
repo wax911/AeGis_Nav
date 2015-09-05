@@ -1,6 +1,7 @@
 package androidhive.info.aegis.activity;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,12 +17,12 @@ import android.widget.Toast;
 import androidhive.info.materialdesign.R;
 
 
-public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
+public class MainActivity extends ActionBarActivity implements androidhive.info.aegis.activity.FragmentDrawer.FragmentDrawerListener {
 
     private static String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar mToolbar;
-    private FragmentDrawer drawerFragment;
+    private androidhive.info.aegis.activity.FragmentDrawer drawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        drawerFragment = (FragmentDrawer)
+        drawerFragment = (androidhive.info.aegis.activity.FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
@@ -91,6 +92,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 fragment = new MessagesFragment();
                 title = getString(R.string.title_messages);
                 break;
+            case 3:
+                fragment =  new androidhive.info.aegis.activity.WifiFragment();
+                title = getString(R.string.title_activity_wifi);
+                break;
             default:
                 break;
         }
@@ -105,4 +110,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             getSupportActionBar().setTitle(title);
         }
     }
+
+
 }
