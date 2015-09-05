@@ -1,7 +1,6 @@
-package androidhive.info.aegis.activity;
+package aegis.com.aegis.activity;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,15 +13,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidhive.info.materialdesign.R;
+import aegis.com.aegis.R;
 
 
-public class MainActivity extends ActionBarActivity implements androidhive.info.aegis.activity.FragmentDrawer.FragmentDrawerListener {
+public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
 
     private static String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar mToolbar;
-    private androidhive.info.aegis.activity.FragmentDrawer drawerFragment;
+    private FragmentDrawer drawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,7 @@ public class MainActivity extends ActionBarActivity implements androidhive.info.
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        drawerFragment = (androidhive.info.aegis.activity.FragmentDrawer)
+        drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);

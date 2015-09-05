@@ -1,4 +1,4 @@
-package androidhive.info.aegis.activity;
+package aegis.com.aegis.activity;
 
 
 import android.app.Activity;
@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidhive.info.materialdesign.R;
+import aegis.com.aegis.R;
 
 
 public class HomeFragment extends Fragment {

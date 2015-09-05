@@ -1,4 +1,4 @@
-package androidhive.info.aegis.activity;
+package aegis.com.aegis.activity;
 
 
 import android.content.Context;
@@ -18,9 +18,9 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidhive.info.aegis.adapter.NavigationDrawerAdapter;
-import androidhive.info.aegis.model.NavDrawerItem;
-import androidhive.info.materialdesign.R;
+import aegis.com.aegis.adapter.NavigationDrawerAdapter;
+import aegis.com.aegis.model.NavDrawerItem;
+import aegis.com.aegis.R;
 
 
 public class FragmentDrawer extends Fragment {

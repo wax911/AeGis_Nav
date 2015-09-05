@@ -1,4 +1,4 @@
-package androidhive.info.aegis.adapter;
+package aegis.com.aegis.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +10,8 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
-import androidhive.info.materialdesign.R;
-import androidhive.info.aegis.model.NavDrawerItem;
+import aegis.com.aegis.R;
+import aegis.com.aegis.model.NavDrawerItem;
 
 
 /**

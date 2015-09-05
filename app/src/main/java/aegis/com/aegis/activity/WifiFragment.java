@@ -1,8 +1,5 @@
-package androidhive.info.aegis.activity;
+package aegis.com.aegis.activity;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,10 +10,8 @@ import android.graphics.Paint;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -32,13 +27,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.Mac;
-
-import aegis.com.aegis.activity.ApolloniusSolver;
-import aegis.com.aegis.activity.Circle;
-import aegis.com.aegis.activity.ListWifi;
-import aegis.com.aegis.activity.XYPoint;
-import androidhive.info.materialdesign.R;
+import aegis.com.aegis.R;
 
     public class WifiFragment extends android.support.v4.app.Fragment{
         ListView lv ;

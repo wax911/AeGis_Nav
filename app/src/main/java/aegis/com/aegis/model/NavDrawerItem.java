@@ -1,4 +1,4 @@
-package androidhive.info.aegis.model;
+package aegis.com.aegis.model;
 
 
 public class NavDrawerItem {

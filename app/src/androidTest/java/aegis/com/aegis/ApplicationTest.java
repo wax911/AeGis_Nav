@@ -1,4 +1,4 @@
-package androidhive.info.aegis;
+package aegis.com.aegis;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
