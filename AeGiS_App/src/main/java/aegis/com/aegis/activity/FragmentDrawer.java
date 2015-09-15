@@ -18,9 +18,9 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import aegis.com.aegis.R;
 import aegis.com.aegis.adapter.NavigationDrawerAdapter;
 import aegis.com.aegis.model.NavDrawerItem;
-import aegis.com.aegis.R;
 
 
 public class FragmentDrawer extends Fragment {

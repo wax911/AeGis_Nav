@@ -1,6 +1,7 @@
 package aegis.com.aegis.activity;
 
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -63,6 +64,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
             return true;
         }
 
@@ -80,6 +82,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
     private void displayView(int position) {
+
         Fragment fragment = null;
         String title = getString(R.string.app_name);
         switch (position) {
@@ -92,7 +95,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_friends);
                 break;
             case 2:
-                fragment = new MessagesFragment();
+                startActivity(new Intent(this,NavigationActivity.class));
                 title = getString(R.string.title_messages);
                 break;
             case 3:
@@ -103,7 +106,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 break;
         }
 
-        if (fragment != null) {
+        if (fragment != null)
+        {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
