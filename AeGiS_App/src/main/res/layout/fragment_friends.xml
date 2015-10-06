@@ -5,26 +5,40 @@
     android:orientation="vertical"
     tools:context="activity.FriendsFragment">
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:layout_marginBottom="167dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="77dp"
+        android:layout_marginStart="77dp" />
+    <Button
+        android:id="@+id/guess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GUESS"
+        android:layout_alignTop="@+id/sign_in_button"
+        android:layout_toRightOf="@+id/imageView3"
+        android:layout_toEndOf="@+id/imageView3" />
 
     <TextView
-        android:id="@+id/label"
+        android:id="@+id/textView3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView3"
+        android:src="@mipmap/ic_launcher"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="100dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textSize="45dp"
-        android:text="FRIENDS"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:layout_below="@id/label"
-        android:layout_centerInParent="true"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="12dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal"
-        android:text="Edit fragment_friends.xml to change the appearance" />
+        android:layout_alignLeft="@+id/sign_in_button"
+        android:layout_alignStart="@+id/sign_in_button"
+        android:layout_marginTop="74dp"
+        android:layout_alignRight="@+id/sign_in_button" />
 
 </RelativeLayout>

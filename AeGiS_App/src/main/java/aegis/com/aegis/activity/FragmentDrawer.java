@@ -2,7 +2,9 @@ package aegis.com.aegis.activity;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +39,6 @@ public class FragmentDrawer extends Fragment {
     private FragmentDrawerListener drawerListener;
 
     public FragmentDrawer() {
-
     }
 
     public void setDrawerListener(FragmentDrawerListener listener) {
@@ -70,7 +72,6 @@ public class FragmentDrawer extends Fragment {
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
-
         adapter = new NavigationDrawerAdapter(getActivity(), getData());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -86,6 +87,7 @@ public class FragmentDrawer extends Fragment {
 
             }
         }));
+
 
         return layout;
     }
@@ -166,6 +168,7 @@ public class FragmentDrawer extends Fragment {
         @Override
         public void onTouchEvent(RecyclerView rv, MotionEvent e) {
         }
+
     }
 
     public interface FragmentDrawerListener {

@@ -219,7 +219,7 @@ import aegis.com.aegis.R;
                     TestWifi();
                     ;
                 }
-            }, 100);
+            }, 300);
         }
 
 

@@ -2,8 +2,10 @@ package aegis.com.aegis.activity;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,17 +15,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import aegis.com.aegis.R;
 
 
-public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
+public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener
+{
 
     private static String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
+    private TextView Username;
+    private SharedPreferences applicationSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +43,14 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        applicationSettings = PreferenceManager.getDefaultSharedPreferences(this);
 
         drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
+        Username = (TextView)findViewById(R.id.nav_greeting);
+        Username.setText(getString(R.string.greeting) + " " + applicationSettings.getString("example_text", "User"));
 
         // display the first navigation drawer view on app launch
         displayView(0);

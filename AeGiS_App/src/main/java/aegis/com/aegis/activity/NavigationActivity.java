@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import aegis.com.aegis.R;
@@ -30,6 +31,7 @@ public class NavigationActivity extends ActionBarActivity {
     private Toolbar mToolbar;
     private GroundOverlay gov;
     private GroundOverlayOptions goo;
+    private Location l;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,10 @@ public class NavigationActivity extends ActionBarActivity {
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         }
+        l = (Location)getIntent().getSerializableExtra("Loc");
+        if(l==null)
+            l = new Location("O.R International Tambo" ,-26.1314138,28.2323354);
+
         setUpMapIfNeeded();
     }
 
@@ -111,8 +117,8 @@ public class NavigationActivity extends ActionBarActivity {
 
     private void setUpMap()
     {
-        LatLng campus = new LatLng(-25.683626,28.131227);
-        goo = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.floor_plan)).position(campus,200f, 100f).bearing(19f);
+        LatLng campus = new LatLng(-25.6840875,28.1315539);
+        goo = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.floor_plan2)).position(campus,200f, 200f).bearing(19f);
         gov = mMap.addGroundOverlay(goo);
 
 
@@ -128,15 +134,21 @@ public class NavigationActivity extends ActionBarActivity {
         UiSettings uis = mMap.getUiSettings();
         uis.setCompassEnabled(true);
 
-        Toast.makeText(this,String.format("Buildings: %s My Location: %s Campus: %s",mMap.isBuildingsEnabled(),mMap.isMyLocationEnabled(),mMap.getUiSettings().isCompassEnabled()),Toast.LENGTH_LONG).show();
+        Toast.makeText(this,String.format("Buildings: %s My Location: %s "+l.getName()+" %s",mMap.isBuildingsEnabled(),mMap.isMyLocationEnabled(),mMap.getUiSettings().isCompassEnabled()),Toast.LENGTH_LONG).show();
 
                       mMap.setBuildingsEnabled(true);
 
         //Show current indoor map for this item
         mMap.animateCamera(CameraUpdateFactory
                                    .newCameraPosition(new CameraPosition.Builder()
-                                                              .target(new LatLng(-25.683909,28.1311551)).zoom(19).build()));
-        //Add marker
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-25.683909, 28.1311551)).title("You're Here"));
+                                                              .target(new LatLng(l.getLat(), l.getLng())).zoom(19).build()));
+        MarkerOptions where = new MarkerOptions().position(new LatLng(l.getLat(), l.getLng())).title("Navigated to "+ l.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker));
+        mMap.addMarker(where);
+
+        MarkerOptions inzeta = new MarkerOptions().position(new LatLng(-25.6842879, 28.1311748)).title("Zeta");
+        mMap.addMarker(inzeta);
+
+        MarkerOptions newcenter = new MarkerOptions().position(new LatLng(-25.6841985,28.1315539)).title("new center zone").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker));
+        mMap.addMarker(newcenter);
     }
 }

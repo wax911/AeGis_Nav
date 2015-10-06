@@ -1,7 +1,10 @@
 package aegis.com.aegis.activity;
 
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -13,24 +16,37 @@ import aegis.com.aegis.R;
  * Created by Maxwell on 9/13/2015.
  */
 //we'll use this class as a notification center mediator
-public class Notifier
+public class Notifier implements INotify
 {
     private Context application;
     private SharedPreferences applicationSettings;
     private NotificationManager notifyManager = null;
     //the notification which will be used
     private String notification = null;
-    //just an application Identifier
-    private static final int appId = 61195110;
+    private static long[] vibrate;
 
     public void Notify(String Message)
     {
+        // Sets up the Snooze and Dismiss action buttons that will appear in the
+        // big view of the notification.
+        Intent dismissIntent = new Intent(application, NotifierManager.class);
+        PendingIntent piDismiss = PendingIntent.getBroadcast(application, 0, dismissIntent, 0);
+
         if (applicationSettings.getBoolean("pref_notify_me", true))
         {
-            NotificationCompat.Builder mbuilder = new NotificationCompat.Builder(application.getApplicationContext()).setSmallIcon(R.mipmap.ic_launcher)
-                                                                                                                     .setContentTitle("Aegis")
-                                                                                                                     .setSound(Uri.parse(notification))
-                                                                                                                     .setContentText(Message);
+            NotificationCompat.Builder
+                    mbuilder =
+                    new NotificationCompat.Builder(
+                            application.getApplicationContext())
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                             .setContentTitle("Aegis")
+                             .setSound(Uri.parse(notification))
+                             .setAutoCancel(true)
+                             .setStyle(new NotificationCompat.BigTextStyle().bigText(Message))
+                             .setVibrate(vibrate)
+                             .addAction(R.drawable.ic_dismiss, "Dismiss", piDismiss)
+                             .setOnlyAlertOnce(true);
+
             notifyManager.notify(appId, mbuilder.build());
         }
     }
@@ -43,5 +59,7 @@ public class Notifier
         applicationSettings = PreferenceManager.getDefaultSharedPreferences(application);
         notification = applicationSettings.getString("notifications_new_message_ringtone", "DEFAULT_SOUND");
         notifyManager = (NotificationManager)application.getSystemService(context.NOTIFICATION_SERVICE);
+        if(applicationSettings.getBoolean("notifications_new_message_vibrate",false))
+            vibrate = new long[] {200,200,200};
     }
 }
