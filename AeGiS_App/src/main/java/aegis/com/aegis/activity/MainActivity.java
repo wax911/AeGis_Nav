@@ -3,6 +3,7 @@ package aegis.com.aegis.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private SharedPreferences.Editor _editor;
     private static final int RC_BARCODE_CAPTURE = 9001;
     private String Result;
+    private Fragment fragment = null;
 
 
     @Override
@@ -60,10 +62,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        user =(User)getIntent().getSerializableExtra("user_profile");
+        user = (User) getIntent().getSerializableExtra("user_profile");
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        fab = (FloatingActionButton)findViewById(R.id.fab_QR);
+        fab = (FloatingActionButton) findViewById(R.id.fab_QR);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarColor));
         }
@@ -75,42 +77,38 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         applicationSettings = PreferenceManager.getDefaultSharedPreferences(this);
         _editor = applicationSettings.edit();
 
-
         drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
 
-        profile_pic = (ImageView)findViewById(R.id.header_profile);
+        profile_pic = (ImageView) findViewById(R.id.header_profile);
 
-        if(user != null)
-        {
-            if(applicationSettings.getString("example_text", "User") != user.getFullname())
+        if (user != null) {
+            if (applicationSettings.getString("example_text", "User") != user.getFullname())
                 _editor.putString("example_text", user.getFullname());
             _editor.commit();
 
             profile_pic.setImageBitmap(new ImageStore(this).getProfileImage());
 
-            if(profile_pic.getDrawable() == null && user.getProfile_pic() != null) {
+            if (profile_pic.getDrawable() == null && user.getProfile_pic() != null) {
                 new AsyncRunner(profile_pic, this).execute(user.getProfile_pic());
                 profile_pic.setImageBitmap(new ImageStore(this).getProfileImage());
-            }
-            else if(profile_pic.getDrawable() == null && user.getProfile_pic() == null)
-            {
+            } else if (profile_pic.getDrawable() == null && user.getProfile_pic() == null) {
                 profile_pic.setImageResource(R.drawable.ic_profile);
             }
-        }
-        else
-        {
+        } else {
             profile_pic.setImageResource(R.drawable.ic_profile);
         }
 
-        Username = (TextView)findViewById(R.id.nav_greeting);
+        Username = (TextView) findViewById(R.id.nav_greeting);
         Username.setText(getString(R.string.greeting) + " " + applicationSettings.getString("example_text", "User"));
         fab.setOnClickListener(this);
 
-        // display the first navigation drawer view on app launch
-        displayView(0);
+        if(savedInstanceState == null) {
+            // display the first navigation drawer view on app launch
+            displayView(0);
+        }
     }
 
 
@@ -125,10 +123,12 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         return true;
     }
 
+
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
         super.onConfigurationChanged(newConfig);
+        Toast.makeText(this,"Rotated Screeen",Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -172,7 +172,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     private void displayView(int position) {
 
-        Fragment fragment = null;
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
