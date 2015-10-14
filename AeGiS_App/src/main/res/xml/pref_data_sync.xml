@@ -1,5 +1,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <CheckBoxPreference
+        android:key="pref_auto_sign-in"
+        android:title="Auto Sign-in"
+        android:summary="The Application will attempt to sign you in automatically each time it starts"
+        android:defaultValue="false" />
+
     <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
          dismiss it. -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->

@@ -3,15 +3,23 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.mxt.mapsindoor.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="aegis.com.aegis.activity.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general"/>
 
     <header
-        android:fragment="com.mxt.mapsindoor.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="aegis.com.aegis.activity.SettingsActivity$NotificationPreferenceFragment"
         android:title="@string/pref_header_notifications"/>
 
     <header
-        android:fragment="com.mxt.mapsindoor.SettingsActivity$DataSyncPreferenceFragment"
+        android:fragment="aegis.com.aegis.activity.SettingsActivity$DataSyncPreferenceFragment"
         android:title="@string/pref_header_data_sync"/>
+
+    <header
+        android:fragment="aegis.com.aegis.activity.SettingsActivity$MapPreferenceFragment"
+        android:title="@string/pref_header_maps"/>
+
+    <header
+        android:fragment="aegis.com.aegis.activity.SettingsActivity$OthersPreferenceFragment"
+        android:title="@string/pref_header_others"/>
 
 </preference-headers>

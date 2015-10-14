@@ -1,17 +1,28 @@
 package aegis.com.aegis.activity;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -19,17 +30,24 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import aegis.com.aegis.R;
+import aegis.com.aegis.logic.Location;
+import aegis.com.aegis.utility.IntentNames;
 
 
-public class NavigationActivity extends ActionBarActivity {
+public class NavigationActivity extends ActionBarActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener , GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener, View.OnClickListener{
 
     private GoogleMap mMap;
     private Toolbar mToolbar;
     private GroundOverlay gov;
     private GroundOverlayOptions goo;
+    private Location l;
+    private SharedPreferences applicationSettings;
+    private FloatingActionButton fab_mylocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,11 +58,19 @@ public class NavigationActivity extends ActionBarActivity {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarColor));
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        fab_mylocation = (FloatingActionButton)findViewById(R.id.fab_findme);
+        fab_mylocation.setOnClickListener(this);
         if(mToolbar != null) {
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         }
+
+        applicationSettings = PreferenceManager.getDefaultSharedPreferences(this);
+
+        l = (Location)getIntent().getSerializableExtra(IntentNames.MAP_INTENT_KEY);
+        if(l==null)
+            l = new Location("O.R International Tambo" ,-26.1314138,28.2323354);
+
         setUpMapIfNeeded();
     }
 
@@ -59,7 +85,7 @@ public class NavigationActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_maps, menu);
         return true;
     }
 
@@ -97,24 +123,18 @@ public class NavigationActivity extends ActionBarActivity {
 
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
-        if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapView))
-                    .getMap();
-            // Check if we were successful in obtaining the map.
-            if (mMap != null)
-            {
-                setUpMap();
-            }
-        }
+            ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapView))
+                    .getMapAsync(this);
     }
 
     private void setUpMap()
     {
-        LatLng campus = new LatLng(-25.683626,28.131227);
-        goo = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.floor_plan)).position(campus,200f, 100f).bearing(19f);
+        LatLng campus = new LatLng(-25.6840875,28.1315539);
+        goo = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.floor_plan2)).position(campus,200f, 200f).bearing(19f);
         gov = mMap.addGroundOverlay(goo);
 
+        applyPreference();
 
         if(!mMap.isIndoorEnabled())
         {
@@ -123,20 +143,160 @@ public class NavigationActivity extends ActionBarActivity {
             return;
         }
 
-        mMap.setBuildingsEnabled(true);
-        mMap.setMyLocationEnabled(true);
-        UiSettings uis = mMap.getUiSettings();
-        uis.setCompassEnabled(true);
-
-        Toast.makeText(this,String.format("Buildings: %s My Location: %s Campus: %s",mMap.isBuildingsEnabled(),mMap.isMyLocationEnabled(),mMap.getUiSettings().isCompassEnabled()),Toast.LENGTH_LONG).show();
-
-                      mMap.setBuildingsEnabled(true);
+        mMap.setOnMapClickListener(this);
+        mMap.setOnMapLongClickListener(this);
+        mMap.setOnMarkerDragListener(this);
 
         //Show current indoor map for this item
         mMap.animateCamera(CameraUpdateFactory
                                    .newCameraPosition(new CameraPosition.Builder()
-                                                              .target(new LatLng(-25.683909,28.1311551)).zoom(19).build()));
-        //Add marker
-        mMap.addMarker(new MarkerOptions().position(new LatLng(-25.683909, 28.1311551)).title("You're Here"));
+                                                              .target(new LatLng(l.getLat(), l.getLng())).zoom(19).build()));
+        MarkerOptions where = new MarkerOptions().position(new LatLng(l.getLat(), l.getLng())).title("Navigated to " + l.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).draggable(true);
+        mMap.addMarker(where);
+
+        MarkerOptions inzeta = new MarkerOptions().position(new LatLng(-25.6842879, 28.1311748)).title("Zeta");
+        mMap.addMarker(inzeta);
+
+        MarkerOptions newcenter = new MarkerOptions().position(new LatLng(-25.6841985, 28.1315539)).title("new center zone").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker));
+        mMap.addMarker(newcenter);
     }
+
+    private void drawPath(LatLng start, LatLng stop)
+    {
+        // Polylines are useful for marking paths and routes on the map.
+        mMap.addPolyline(new PolylineOptions().geodesic(true)
+                                 .add(start).add(stop)); // move marker to this point
+    }
+
+    private void animateCameraFollowUser(LatLng mapCenter)
+    {
+        // Flat markers will rotate when the map is rotated,
+        // and change perspective when the map is tilted.
+        mMap.addMarker(new MarkerOptions()
+                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_usermarker))
+                               .position(mapCenter)
+                               .flat(true)
+                               .rotation(245));
+
+        CameraPosition cameraPosition = CameraPosition.builder()
+                                                      .target(mapCenter)
+                                                      .zoom(13)
+                                                      .bearing(90)
+                                                      .build();
+
+        // Animate the change in camera view over 2 seconds
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
+                          2000, null);
+    }
+
+    public void onPickButtonClick() {
+        // Construct an intent for the place picker
+        try {
+            PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+            Intent intent = intentBuilder.build(NavigationActivity.this);
+            // Start the Intent by requesting a result, identified by a request code.
+            startActivityForResult(intent, 123);
+
+
+        } catch (GooglePlayServicesRepairableException e) {
+            GooglePlayServicesUtil
+                    .getErrorDialog(e.getConnectionStatusCode(), NavigationActivity.this, 0);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            Toast.makeText(NavigationActivity.this, "Google Play Services is not available.",
+                           Toast.LENGTH_LONG)
+                 .show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,
+                                    int resultCode, Intent data) {
+
+        if (requestCode == 123
+                && resultCode == Activity.RESULT_OK) {
+
+            // The user has selected a place. Extract the name and address.
+            final Place place = PlacePicker.getPlace(data, this);
+
+            final CharSequence name = place.getName();
+            final CharSequence address = place.getAddress();
+            String attributions = PlacePicker.getAttributions(data);
+            if (attributions == null) {
+                attributions = "";
+            }
+            Toast.makeText(this,name+" "+address+Html.fromHtml(attributions),Toast.LENGTH_LONG).show();
+
+            mMap.animateCamera(CameraUpdateFactory
+                                       .newCameraPosition(new CameraPosition.Builder()
+                                                                  .target(place.getLatLng()).zoom(19).build()));
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+
+    private void applyPreference()
+    {
+        mMap.setTrafficEnabled(applicationSettings.getBoolean("pref_trafic_enabled",false));
+        mMap.setBuildingsEnabled(applicationSettings.getBoolean("pref_buildings_enabled",false));
+        mMap.setMyLocationEnabled(applicationSettings.getBoolean("pref_mylocation_enabled",true));
+        UiSettings uis = mMap.getUiSettings();
+        uis.setCompassEnabled(applicationSettings.getBoolean("pref_compass_enabled",false));
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng)
+    {
+        //Check if the clicked item can be a store or something similar
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng)
+    {
+        Toast.makeText(this,"Long Touch",Toast.LENGTH_LONG).show();
+        MarkerOptions usermarker = new MarkerOptions().position(latLng).title("Users Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_usermarker)).draggable(true);
+        mMap.addMarker(usermarker);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.fab_findme:
+                //Snackbar.make(v,"Creates new circle with all properties",Snackbar.LENGTH_LONG).show();
+                onPickButtonClick();
+            break;
+        }
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        if(mMap == null) {
+            mMap = googleMap;
+            setUpMap();
+        }
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+        Toast.makeText(this,marker.getTitle()+" started moving "+marker.getPosition().toString(),Toast.LENGTH_LONG).show();
+        startp = marker.getPosition();
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        Toast.makeText(this,marker.getTitle()+" ended moving "+marker.getPosition().toString(),Toast.LENGTH_LONG).show();
+        stopp = marker.getPosition();
+        drawPath(startp,stopp);
+    }
+
+    private LatLng startp;
+    private LatLng stopp;
 }

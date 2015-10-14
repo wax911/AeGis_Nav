@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="80dp"
+            android:theme="@style/PlacesTheme">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/vertical_page_margin"
+        android:paddingLeft="@dimen/horizontal_page_margin"
+        android:paddingRight="@dimen/horizontal_page_margin"
+        android:paddingTop="@dimen/vertical_page_margin"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/intro_message"
+            android:textColor="@color/blue_grey_500"
+            />
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+        <AutoCompleteTextView
+            android:id="@+id/autocomplete_places"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:hint="@string/autocomplete_hint"
+            android:singleLine="true"
+            android:textColor="@color/blue_grey_500"
+            android:theme="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+            android:layout_marginTop="20dp"
+            android:layout_toLeftOf="@+id/button_clear"
+            android:layout_toStartOf="@+id/button_clear"/>
+    <ImageButton
+        android:id="@+id/button_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_dismiss"
+        android:layout_margin="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+</RelativeLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:src="@drawable/ic_cast_on_light"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:id="@+id/open_inmap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/show_on_map"
+            android:theme="@style/ThemeOverlay.MyDarkButton"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/selected_place"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/blue_grey_500"
+            android:layout_marginTop="20dp"/>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_gravity="center"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:contentPadding="5dp"
+            app:cardBackgroundColor="@color/blue_grey_800"
+            app:cardElevation="15dp"
+            app:cardCornerRadius="15dp"
+            android:layout_weight="1"
+            android:layout_marginTop="20dp">
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+            android:id="@+id/place_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="all"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/place_attribution"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_below="@+id/place_details"
+            android:autoLink="all"
+            android:layout_marginTop="20dp"/>
+
+        <RatingBar
+            android:id="@+id/place_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/place_attribution"
+            android:numStars="5"
+            android:stepSize="0.1"
+            android:layout_alignParentBottom="true"
+            android:clickable="false"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</ScrollView>

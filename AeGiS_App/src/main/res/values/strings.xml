@@ -2,26 +2,28 @@
     <string name="app_name">AeGis NAV</string>
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
+    <string name="action_logout">Sign Out</string>
+    <string name="action_feedback">Send Feedback</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
     <string name="nav_item_home">Home</string>
-    <string name="nav_item_friends">Friends</string>
-    <string name="nav_item_notifications">Navigation</string>
-    <string name="nav_item_Wifi">WiFi Find</string>
-    <string name="title_activity_list_wifi">List Of WiFi\'s In The Area</string>
+    <string name="nav_item_placess">Places</string>
+    <string name="nav_item_navigation">Navigation</string>
+    <string name="nav_item_extras">Extras</string>
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
-        <item>@string/nav_item_friends</item>
-        <item>@string/nav_item_notifications</item>
-        <item>@string/nav_item_Wifi</item>
+        <item>@string/nav_item_placess</item>
+        <item>@string/nav_item_navigation</item>
+        <item>@string/nav_item_extras</item>
     </string-array>
 
-    <string name="title_messages">Navigation</string>
-    <string name="title_friends">Friends</string>
+    <string name="title_navigation">Navigation</string>
+    <string name="title_barcodes">QR/Barcode Scanner</string>
     <string name="title_home">Home</string>
-    <string name="title_activity_wifi">Wifi</string>
+    <string name="title_extras">Extras</string>
+    <string name="title_places">Places</string>
 
     <string name="hello_world">Hello world!</string>
 
@@ -45,7 +47,7 @@
     </string>
 
     <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
+    <string name="pref_default_display_name">User</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">
@@ -63,6 +65,7 @@
     <string name="pref_header_data_sync">Data &amp; sync</string>
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
+
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -71,6 +74,7 @@
         <item>6 hours</item>
         <item>Never</item>
     </string-array>
+
     <string-array name="pref_sync_frequency_values">
         <item>15</item>
         <item>30</item>
@@ -78,6 +82,24 @@
         <item>180</item>
         <item>360</item>
         <item>-1</item>
+    </string-array>
+
+    <string-array name="pref_frame_rate_list">
+        <item>15 FPS</item>
+        <item>30 FPS</item>
+        <item>35 FPS</item>
+        <item>40 FPS</item>
+        <item>45 FPS</item>
+        <item>50 FPS</item>
+    </string-array>
+
+    <string-array name="pref_frame_rate_values">
+        <item>15</item>
+        <item>30</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
     </string-array>
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
@@ -91,4 +113,71 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+
+    <string name="pref_header_maps">Mapping Options</string>
+
+    <string name="pref_header_others">Other Settings</string>
+
+    <!-- End of Pref -->
+
+
+    <string name="greeting">Welcome Back</string>
+
+    <!-- For Camera stuff -->
+    <string name="ok">OK</string>
+    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
+    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
+    <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage</string>
+    <string name="barcode_success">Barcode read successfully</string>
+    <string name="barcode_failure">No barcode captured</string>
+    <string name="barcode_error">"Error reading barcode: %1$s"</string>
+
+    <!-- Gsign-in -->
+    <string name="title_text">AeGis Sign-In</string>
+
+    <!-- Sign-in status messages -->
+    <string name="signed_in_fmt">Signed in as: %s</string>
+    <string name="signing_in">Signing in…</string>
+    <string name="signed_out">Signed out</string>
+    <string name="signed_in_err">"Error: The application has failed to sign-in."</string>
+    <string name="error_null_person">
+        Error: Plus.PeopleApi.getCurrentPerson returned null. Ensure that the Google+ API is
+        enabled for your project, you have a properly configured google-services.json file
+        and that your device has an internet connection.
+    </string>
+
+    <!-- Google Play Services error for Toast -->
+    <string name="play_services_error_fmt">Google Play Services Error: %i</string>
+
+    <!-- Button labels -->
+    <string name="sign_out">Sign Out</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="proceed_guest">Sign-in As Guest</string>
+    <string name="proceed">Proceed To App</string>
+
+    <!-- Content Description for images -->
+    <string name="desc_google_icon">Google Logo</string>
+
+    <!-- Rationale for asking for Contacts -->
+    <string name="contacts_permission_rationale">Contacts access is needed in order to retrieve your email address.</string>
+
+    <!--Places-->
+    <string name="autocomplete_hint">Enter place name or address</string>
+    <string name="selected_place">Last Selected Place:</string>
+    <string name="show_on_map">Open In Maps</string>
+
+    <!-- getString(String, Object...) does not support HTML tags directly, they need to be encoded first.
+    Original string: <b>%1$s</b><br/><i>Place_Abs Id: %2$s</i><br/>Address: %3$s<br/>Phone: %4$s<br/>Website: %5$s-->
+    <string name="place_details">&lt;b&gt;%1$s&lt;/b&gt;&lt;br/&gt;&lt;i&gt;Place Id: %2$s&lt;/i&gt;&lt;br/&gt;Address: %3$s&lt;br/&gt;Phone: %4$s&lt;br/&gt;Website: %5$s</string>
+    <string name="intro_message">
+        <![CDATA[
+
+
+            AeGis Nav has intergrated google play services inorder to get the most out of our device, allowing you to search for places, scan barcodes, view indoor maps,
+            with some customizations on the implementation to improve the user experience.
+
+
+        ]]>
+    </string>
 </resources>
