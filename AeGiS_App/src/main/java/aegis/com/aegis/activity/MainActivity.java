@@ -18,26 +18,38 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import aegis.com.aegis.R;
+import aegis.com.aegis.adapter.AutoCompleteAdapter;
 import aegis.com.aegis.barcodereader.BarcodeCaptureActivity;
 import aegis.com.aegis.logic.User;
+import aegis.com.aegis.utility.ApiClientProvider;
 import aegis.com.aegis.utility.AsyncRunner;
+import aegis.com.aegis.utility.DismissKeyboard;
 import aegis.com.aegis.utility.ImageStore;
+import aegis.com.aegis.utility.IntentNames;
 import aegis.com.aegis.utility.Notifier;
 
 
-public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener
+public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, SearchView.OnQueryTextListener, Animation.AnimationListener
 {
 
     private static String TAG = MainActivity.class.getSimpleName();
@@ -54,7 +66,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private SharedPreferences.Editor _editor;
     private static final int RC_BARCODE_CAPTURE = 9001;
     private String Result;
+    private AutoCompleteAdapter mAdapter;
     private Fragment fragment = null;
+    private SearchView searchbar;
 
 
     @Override
@@ -69,7 +83,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarColor));
         }
+
         spin = AnimationUtils.loadAnimation(this, R.anim.rotate_it);
+        spin.setAnimationListener(this);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -117,9 +133,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchbar = (SearchView)MenuItemCompat.getActionView(searchItem);
+        searchbar.setOnQueryTextListener(this);
         // Configure the search info and add any event listeners
-        searchView.setSubmitButtonEnabled(true);
+        searchbar.setSubmitButtonEnabled(true);
         return true;
     }
 
@@ -220,9 +238,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         {
             case R.id.fab_QR:
                 fab.startAnimation(spin);
-                // launch barcode activity.
-                Intent intent = new Intent(this, BarcodeCaptureActivity.class);
-                startActivityForResult(intent, RC_BARCODE_CAPTURE);
                 break;
         }
     }
@@ -266,4 +281,38 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
 
+    @Override
+    public boolean onQueryTextSubmit(String query)
+    {
+        Bundle info = new Bundle();
+        info.putString(IntentNames.Search_View_KEY, query);
+        DismissKeyboard.hideSoftKeyboard(this);
+        searchbar.setIconified(true);
+        searchbar.clearFocus();
+        //fragment.setArguments(info);
+        displayView(1);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        // launch barcode activity.
+        Intent intent = new Intent(this, BarcodeCaptureActivity.class);
+        startActivityForResult(intent, RC_BARCODE_CAPTURE);
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
+    }
 }

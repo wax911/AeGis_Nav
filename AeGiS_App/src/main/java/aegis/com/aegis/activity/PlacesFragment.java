@@ -7,12 +7,15 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -41,7 +44,7 @@ import aegis.com.aegis.utility.DismissKeyboard;
 import aegis.com.aegis.utility.IntentNames;
 import aegis.com.aegis.utility.Notifier;
 
-public class PlacesFragment extends android.support.v4.app.Fragment implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+public class PlacesFragment extends android.support.v4.app.Fragment implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, TextView.OnEditorActionListener {
 
     /**
      * GoogleApiClient wraps our service connection to Google Play Services and provides access
@@ -55,10 +58,10 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
     private AutoCompleteTextView mAutocompleteView;
 
     private Places_Impl desired_place;
-private Place_Abs pca;
     private ImageButton clearButton;
     private Button OpenMapButton;
-
+    private Bundle reciever;
+    private String data;
     private RatingBar mRating;
     private TextView mPlaceDetailsText;
 
@@ -77,7 +80,7 @@ private Place_Abs pca;
         // events. If your activity does not extend FragmentActivity, make sure to call connect()
         // and disconnect() explicitly.
         mGoogleApiClient = ApiClientProvider.getInstance(this, getActivity());
-
+        reciever = this.getArguments();
     }
 
     @Override
@@ -96,6 +99,7 @@ private Place_Abs pca;
 
         // Register a listener that receives callbacks when a suggestion has been selected
         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
+        mAutocompleteView.setOnEditorActionListener(this);
 
         // Retrieve the TextViews that will display details and attributions of the selected place.
         mPlaceDetailsText = (TextView) root.findViewById(R.id.place_details);
@@ -115,6 +119,12 @@ private Place_Abs pca;
         OpenMapButton.setOnClickListener(this);
 
         OpenMapButton.setEnabled(false);
+
+        if(reciever != null) {
+            data = reciever.getString(IntentNames.Search_View_KEY, null);
+            mAutocompleteView.setText(data);
+        }
+
         return root;
     }
 
@@ -164,14 +174,14 @@ private Place_Abs pca;
 
             desired_place = new Places_Impl(
                     place.getId(),
-                    new Location(place.getName().toString(),place.getLatLng().latitude,place.getLatLng().longitude)
-                    ,place.getAddress().toString(),place.getRating(),place.getWebsiteUri().toString(),place.getAddress().toString()
+                    new Location(String.valueOf(place.getName()),place.getLatLng().latitude,place.getLatLng().longitude)
+                    ,String.valueOf(place.getAddress()), place.getRating(), String.valueOf(place.getWebsiteUri()), String.valueOf(place.getAddress())
             );
 
 
             // Format details of the place for display and show it in a TextView.
             mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
-                                                         place.getId(), place.getAddress(), place.getPhoneNumber(),
+                                                         place.getLatLng().toString(), place.getAddress(), place.getPhoneNumber(),
                                                          place.getWebsiteUri()));
 
             //Dismiss the keyboard when we select an item.
@@ -180,6 +190,11 @@ private Place_Abs pca;
             OpenMapButton.setEnabled(true);
 
             mRating.setRating(place.getRating()*10);
+
+            if(mRating.getRating() < 0f) {
+                Snackbar.make(getActivity().findViewById(R.id.Places_screen), desired_place.getPlace_cord().getName() + " doesn't have ratings yet.", Snackbar.LENGTH_LONG).show();
+            }
+
             // Display the third party attributions if set.
             final CharSequence thirdPartyAttribution = places.getAttributions();
             if (thirdPartyAttribution == null) {
@@ -195,11 +210,11 @@ private Place_Abs pca;
         }
     };
 
-    private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
+    private static Spanned formatPlaceDetails(Resources res, CharSequence name, String gps,
                                               CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
-        Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber,
+        Log.e(TAG, res.getString(R.string.place_details, name, gps, address, phoneNumber,
                                  websiteUri));
-        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
+        return Html.fromHtml(res.getString(R.string.place_details, name, gps, address, phoneNumber,
                                            websiteUri));
 
     }
@@ -213,7 +228,6 @@ private Place_Abs pca;
      */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
         Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
                 + connectionResult.getErrorCode());
 
@@ -248,5 +262,17 @@ private Place_Abs pca;
                 break;
         }
 
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+    {
+        switch (actionId)
+        {
+            case EditorInfo.IME_ACTION_DONE:
+                DismissKeyboard.hideSoftKeyboard(getActivity());
+            break;
+        }
+        return true;
     }
 }

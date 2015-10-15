@@ -6,4 +6,5 @@ package aegis.com.aegis.utility;
  */
 public interface IntentNames {
     String MAP_INTENT_KEY = "com.aegis.map.location.data";
+    String Search_View_KEY = "com.aegis.view.search.query";
 }

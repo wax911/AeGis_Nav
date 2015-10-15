@@ -156,8 +156,12 @@ public class LoginActivity extends AppCompatActivity implements
 
                 String profile_link = null;
 
-                if(currentPerson.hasImage())
+                if(currentPerson.hasImage()) {
                     profile_link = currentPerson.getImage().getUrl();
+                    // by default the profile url gives 50x50 px image only
+                    // we can replace the value with whatever dimension we want by
+                    user.setProfile_pic(profile_link.substring(0, profile_link.length() - 2) + 400);
+                }
 
                 // Show users' email address (which requires GET_ACCOUNTS permission)
                 if (checkAccountsPermission()) {
@@ -165,13 +169,9 @@ public class LoginActivity extends AppCompatActivity implements
                     ((TextView) findViewById(R.id.email)).setText(user.getEmail());
                 }
 
-                // by default the profile url gives 50x50 px image only
-                // we can replace the value with whatever dimension we want by
-                // replacing sz=X
-                user.setProfile_pic(profile_link.substring(0, currentPerson.getImage().getUrl().length() - 2) + 400);
-                //user.setCover_pic(cover_link.substring(0, currentPerson.getImage().getUrl().length() - 2) + 400);
 
-                if(!applicationSettings.getBoolean("stored_info",false) && profile.getDrawable() == null)
+
+                if(!applicationSettings.getBoolean("stored_info",false) && profile_link != null)
                 {
                     Snackbar.make(findViewById(R.id.main_layout),"Profile Picture is being loaded. Please wait..",Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.ok), new View.OnClickListener() {
                         @Override
@@ -179,6 +179,10 @@ public class LoginActivity extends AppCompatActivity implements
                             //Nothing to do here as of now
                         }
                     }).show();
+                    new AsyncRunner(profile, this).execute(user.getProfile_pic());
+                }
+                else if(profile_link != null)
+                {
                     new AsyncRunner(profile, this).execute(user.getProfile_pic());
                 }
                 else

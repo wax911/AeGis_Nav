@@ -11,7 +11,7 @@ import com.google.android.gms.location.places.Places;
  * Singleton class to assure that we have only one instance of the GoogleAPIClient
  */
 public class ApiClientProvider {
-    private final static int id = 0;
+    private final static int id = 561000120;
     private static GoogleApiClient ourInstance;
 
     public static GoogleApiClient getInstance(GoogleApiClient.OnConnectionFailedListener event, Context app)
