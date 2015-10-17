@@ -168,6 +168,7 @@ public class FragmentDrawer extends Fragment {
         @Override
         public void onTouchEvent(RecyclerView rv, MotionEvent e) {
         }
+
     }
 
     public interface FragmentDrawerListener {

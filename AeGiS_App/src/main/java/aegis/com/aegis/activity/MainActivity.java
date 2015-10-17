@@ -3,6 +3,7 @@ package aegis.com.aegis.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+<<<<<<< HEAD
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -10,6 +11,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+=======
+import android.os.Build;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+>>>>>>> origin/master
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -23,10 +29,13 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+<<<<<<< HEAD
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
+=======
+>>>>>>> origin/master
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +58,11 @@ import aegis.com.aegis.utility.IntentNames;
 import aegis.com.aegis.utility.Notifier;
 
 
+<<<<<<< HEAD
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, SearchView.OnQueryTextListener, Animation.AnimationListener
+=======
+public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener
+>>>>>>> origin/master
 {
 
     private static String TAG = MainActivity.class.getSimpleName();
@@ -60,6 +73,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private FragmentDrawer drawerFragment;
     private TextView Username;
     private SharedPreferences applicationSettings;
+<<<<<<< HEAD
     private FloatingActionButton fab;
     private static Animation spin;
     private User user;
@@ -70,6 +84,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private Fragment fragment = null;
     private SearchView searchbar;
 
+=======
+>>>>>>> origin/master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +105,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        applicationSettings = PreferenceManager.getDefaultSharedPreferences(this);
 
         applicationSettings = PreferenceManager.getDefaultSharedPreferences(this);
         _editor = applicationSettings.edit();
@@ -97,6 +114,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
+        Username = (TextView)findViewById(R.id.nav_greeting);
+        Username.setText(getString(R.string.greeting) + " " + applicationSettings.getString("example_text", "User"));
 
         profile_pic = (ImageView) findViewById(R.id.header_profile);
 

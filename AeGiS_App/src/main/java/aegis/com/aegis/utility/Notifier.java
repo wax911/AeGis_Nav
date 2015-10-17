@@ -1,5 +1,6 @@
 package aegis.com.aegis.utility;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -34,6 +35,7 @@ public class Notifier implements INotify
 
         if (applicationSettings.getBoolean("pref_notify_me", true))
         {
+<<<<<<< HEAD:AeGiS_App/src/main/java/aegis/com/aegis/utility/Notifier.java
             NotificationCompat.Builder mbuilder = new NotificationCompat.Builder(application.getApplicationContext()).setSmallIcon(R.mipmap.ic_launcher)
                      .setContentTitle(Title == null ? "Aegis": Title)
                      .setSound(Uri.parse(notification))
@@ -43,6 +45,20 @@ public class Notifier implements INotify
                      .addAction(R.drawable.ic_dismiss, "Dismiss", piDismiss)
                      .setOnlyAlertOnce(true)
                     .setAutoCancel(true);
+=======
+            NotificationCompat.Builder
+                    mbuilder =
+                    new NotificationCompat.Builder(
+                            application.getApplicationContext())
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                             .setContentTitle("Aegis")
+                             .setSound(Uri.parse(notification))
+                             .setAutoCancel(true)
+                             .setStyle(new NotificationCompat.BigTextStyle().bigText(Message))
+                             .setVibrate(vibrate)
+                             .addAction(R.drawable.ic_dismiss, "Dismiss", piDismiss)
+                             .setOnlyAlertOnce(true);
+>>>>>>> origin/master:AeGiS_App/src/main/java/aegis/com/aegis/activity/Notifier.java
 
             notifyManager.notify(appId, mbuilder.build());
         }

@@ -46,8 +46,11 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
     private GroundOverlay gov;
     private GroundOverlayOptions goo;
     private Location l;
+<<<<<<< HEAD
     private SharedPreferences applicationSettings;
     private FloatingActionButton fab_mylocation;
+=======
+>>>>>>> origin/master
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,10 +67,14 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         }
+<<<<<<< HEAD
 
         applicationSettings = PreferenceManager.getDefaultSharedPreferences(this);
 
         l = (Location)getIntent().getSerializableExtra(IntentNames.MAP_INTENT_KEY);
+=======
+        l = (Location)getIntent().getSerializableExtra("Loc");
+>>>>>>> origin/master
         if(l==null)
             l = new Location("O.R International Tambo" ,-26.1314138,28.2323354);
 
@@ -143,20 +150,36 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
             return;
         }
 
+<<<<<<< HEAD
         mMap.setOnMapClickListener(this);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerDragListener(this);
+=======
+        mMap.setBuildingsEnabled(true);
+        mMap.setMyLocationEnabled(true);
+        UiSettings uis = mMap.getUiSettings();
+        uis.setCompassEnabled(true);
+
+        Toast.makeText(this,String.format("Buildings: %s My Location: %s "+l.getName()+" %s",mMap.isBuildingsEnabled(),mMap.isMyLocationEnabled(),mMap.getUiSettings().isCompassEnabled()),Toast.LENGTH_LONG).show();
+
+                      mMap.setBuildingsEnabled(true);
+>>>>>>> origin/master
 
         //Show current indoor map for this item
         mMap.animateCamera(CameraUpdateFactory
                                    .newCameraPosition(new CameraPosition.Builder()
                                                               .target(new LatLng(l.getLat(), l.getLng())).zoom(19).build()));
+<<<<<<< HEAD
         MarkerOptions where = new MarkerOptions().position(new LatLng(l.getLat(), l.getLng())).title("Navigated to " + l.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).draggable(true);
+=======
+        MarkerOptions where = new MarkerOptions().position(new LatLng(l.getLat(), l.getLng())).title("Navigated to "+ l.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker));
+>>>>>>> origin/master
         mMap.addMarker(where);
 
         MarkerOptions inzeta = new MarkerOptions().position(new LatLng(-25.6842879, 28.1311748)).title("Zeta");
         mMap.addMarker(inzeta);
 
+<<<<<<< HEAD
         MarkerOptions newcenter = new MarkerOptions().position(new LatLng(-25.6841985, 28.1315539)).title("new center zone").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker));
         mMap.addMarker(newcenter);
     }
@@ -233,6 +256,10 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+=======
+        MarkerOptions newcenter = new MarkerOptions().position(new LatLng(-25.6841985,28.1315539)).title("new center zone").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker));
+        mMap.addMarker(newcenter);
+>>>>>>> origin/master
     }
 
 
