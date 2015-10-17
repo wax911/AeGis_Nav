@@ -14,11 +14,13 @@ import java.io.InputStream;
  * Background Async task to load user profile picture from url
  * use .recycle to release bitmap objects from memory
  * */
-public class AsyncRunner extends AsyncTask<String, Void, Bitmap> {
+public class AsyncRunner extends AsyncTask<String, Void, Bitmap>
+{
     private ImageView bmImage;
     private Context context;
 
-    public AsyncRunner(ImageView bmImage, Context context) {
+    public AsyncRunner(ImageView bmImage, Context context)
+    {
         this.bmImage = bmImage;
         this.context = context;
     }
