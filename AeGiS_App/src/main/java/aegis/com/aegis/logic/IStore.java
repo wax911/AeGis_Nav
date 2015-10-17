@@ -9,4 +9,5 @@ public interface IStore
 {
     void setProfileImage(Bitmap image);
     Bitmap getProfileImage();
+    boolean hasPicture();
 }

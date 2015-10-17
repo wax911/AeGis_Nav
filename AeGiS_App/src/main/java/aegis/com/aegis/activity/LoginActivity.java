@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -59,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements
     /* Keys for persisting instance variables in savedInstanceState */
     private static final String KEY_IS_RESOLVING = "is_resolving";
     private static final String KEY_SHOULD_RESOLVE = "should_resolve";
+    private Bitmap imgtemp;
 
     /* Client for accessing Google APIs */
     private GoogleApiClient mGoogleApiClient;
@@ -183,11 +185,13 @@ public class LoginActivity extends AppCompatActivity implements
                 }
                 else if(profile_link != null)
                 {
-                    new AsyncRunner(profile, this).execute(user.getProfile_pic());
-                }
-                else
-                {
-                    profile.setImageBitmap(new ImageStore(this).getProfileImage());
+                    if(new ImageStore(this).hasPicture()) {
+                        imgtemp = new ImageStore(this).getProfileImage();
+                        profile.setImageBitmap(imgtemp);
+                    }
+                    else
+                        new AsyncRunner(profile, this).execute(user.getProfile_pic());
+                    imgtemp.recycle();
                 }
 
             } else {

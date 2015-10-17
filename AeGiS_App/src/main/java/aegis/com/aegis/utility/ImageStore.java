@@ -92,6 +92,12 @@ public class ImageStore implements IStore,Serializable
         return image;
     }
 
+    @Override
+    public boolean hasPicture() {
+        return store.exists();
+    }
+
+
     public ImageStore(Context app)
     {
         this.path = Environment.getExternalStorageDirectory().getPath();
