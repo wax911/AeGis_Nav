@@ -34,11 +34,7 @@
             android:textSize="12dp"
             android:textStyle="bold"
             android:text="@string/greeting"
-<<<<<<< HEAD
             android:textColor="@color/windowBackground"
-=======
-            android:textColor="@color/textColorPrimary"
->>>>>>> origin/master
             />
 
     </RelativeLayout>

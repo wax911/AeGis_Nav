@@ -3,7 +3,6 @@ package aegis.com.aegis.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-<<<<<<< HEAD
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -11,11 +10,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-=======
-import android.os.Build;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
->>>>>>> origin/master
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -29,13 +23,10 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-<<<<<<< HEAD
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
-=======
->>>>>>> origin/master
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,11 +49,8 @@ import aegis.com.aegis.utility.IntentNames;
 import aegis.com.aegis.utility.Notifier;
 
 
-<<<<<<< HEAD
+
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, SearchView.OnQueryTextListener, Animation.AnimationListener
-=======
-public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener
->>>>>>> origin/master
 {
 
     private static String TAG = MainActivity.class.getSimpleName();
@@ -73,7 +61,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private FragmentDrawer drawerFragment;
     private TextView Username;
     private SharedPreferences applicationSettings;
-<<<<<<< HEAD
     private FloatingActionButton fab;
     private static Animation spin;
     private User user;
@@ -83,9 +70,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private AutoCompleteAdapter mAdapter;
     private Fragment fragment = null;
     private SearchView searchbar;
-
-=======
->>>>>>> origin/master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
