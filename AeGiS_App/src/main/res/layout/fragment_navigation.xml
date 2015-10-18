@@ -1,30 +1,45 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="activity.MessagesFragment">
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/root"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="horizontal" >
+
+    <include
+        layout="@layout/toolbar_maps"
+        />
+
+    <fragment
+        android:id="@+id/mapView"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_height="match_parent"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        />
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                 android:id="@+id/contain"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_marginBottom="34dp">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_findme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_location"
+            android:layout_margin="@dimen/fab_compat_margin"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"
+            app:backgroundTint="@color/fab_tint"
+            app:rippleColor="@color/fab_ripple"
+            app:borderWidth="0dp"
+
+            android:layout_gravity="left|bottom"/>
+    </FrameLayout>
+
+</FrameLayout>
 
 
-    <TextView
-        android:id="@+id/label"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="100dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textSize="45dp"
-        android:text="Navigation"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_below="@id/label"
-        android:layout_centerInParent="true"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="12dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal"
-        android:text="Edit fragment_navigation.xml to change the appearance" />
-
-</RelativeLayout>

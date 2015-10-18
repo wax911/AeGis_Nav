@@ -18,18 +18,36 @@
             android:orientation="vertical">
 
             <include
-                android:id="@+id/toolbar"
                 layout="@layout/toolbar" />
         </LinearLayout>
 
-        <FrameLayout
-            android:id="@+id/container_body"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/container_body"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="56dp">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_QR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_scanner"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_compat_margin"
+            app:elevation="8dp"
+            app:pressedTranslationZ="12dp"
+            app:backgroundTint="@color/fab_tint"
+            app:rippleColor="@color/fab_ripple"
+            app:borderWidth="0dp"
+            />
+
+        </FrameLayout>
+
+
 
 
     <fragment

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/topLayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:keepScreenOn="true">
+
+  <aegis.com.aegis.barcodereader.ui.camera.CameraSourcePreview
+      android:id="@+id/preview"
+      android:layout_width="fill_parent"
+      android:layout_height="match_parent">
+
+    <aegis.com.aegis.barcodereader.ui.camera.GraphicOverlay
+        android:id="@+id/graphicOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+  </aegis.com.aegis.barcodereader.ui.camera.CameraSourcePreview>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_flashtoogle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:src="@drawable/ic_flash_off"
+        app:elevation="20dp"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="@color/fab_tint"
+        app:rippleColor="@color/fab_ripple"
+        app:borderWidth="0dp"
+        android:layout_alignTop="@+id/fab_captureQR"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_captureQR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_capture"
+        android:layout_gravity="bottom|right"
+        app:elevation="20dp"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="@color/fab_tint"
+        app:rippleColor="@color/fab_ripple"
+        app:borderWidth="0dp"
+        android:layout_marginBottom="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

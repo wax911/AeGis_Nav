@@ -8,11 +8,30 @@
         android:title="@string/action_search"
         android:orderInCategory="100"
         android:icon="@drawable/ic_action_search"
-        app:showAsAction="ifRoom" />
+        android:imeOptions="actionNone|flagNoExtractUi"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
+        android:orderInCategory="101"
+        android:icon="@drawable/ic_setting_dark"
+        app:showAsAction="always|collapseActionView"
+        />
+
+    <item
+        android:id="@+id/action_logout"
+        android:title="@string/action_logout"
+        android:orderInCategory="102"
+        android:icon="@drawable/ic_action_logout"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_feedback"
+        android:title="@string/action_feedback"
+        android:orderInCategory="103"
+        android:icon="@drawable/ic_action_feedback"
+        app:showAsAction="ifRoom"/>
+
 </menu>

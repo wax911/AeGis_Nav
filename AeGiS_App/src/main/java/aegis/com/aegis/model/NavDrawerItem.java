@@ -1,10 +1,11 @@
 package aegis.com.aegis.model;
 
 
-public class NavDrawerItem {
+public class NavDrawerItem
+{
     private boolean showNotify;
     private String title;
-
+    private int icon;
 
     public NavDrawerItem() {
 
@@ -29,5 +30,13 @@ public class NavDrawerItem {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
     }
 }

@@ -18,9 +18,9 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import aegis.com.aegis.R;
 import aegis.com.aegis.adapter.NavigationDrawerAdapter;
 import aegis.com.aegis.model.NavDrawerItem;
-import aegis.com.aegis.R;
 
 
 public class FragmentDrawer extends Fragment {
@@ -33,24 +33,25 @@ public class FragmentDrawer extends Fragment {
     private NavigationDrawerAdapter adapter;
     private View containerView;
     private static String[] titles = null;
+    private static int[] icons = null;
     private FragmentDrawerListener drawerListener;
 
     public FragmentDrawer() {
-
     }
 
     public void setDrawerListener(FragmentDrawerListener listener) {
         this.drawerListener = listener;
     }
 
-    public static List<NavDrawerItem> getData() {
+    public static List<NavDrawerItem> getData()
+    {
         List<NavDrawerItem> data = new ArrayList<>();
-
 
         // preparing navigation drawer items
         for (int i = 0; i < titles.length; i++) {
             NavDrawerItem navItem = new NavDrawerItem();
             navItem.setTitle(titles[i]);
+            navItem.setIcon(icons[i]);
             data.add(navItem);
         }
         return data;
@@ -62,6 +63,8 @@ public class FragmentDrawer extends Fragment {
 
         // drawer labels
         titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels);
+        // drawer icons
+        icons = new int[] {R.drawable.ic_home,R.drawable.ic_places,R.drawable.ic_navi,R.drawable.ic_extra};
     }
 
     @Override
@@ -70,7 +73,6 @@ public class FragmentDrawer extends Fragment {
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
-
         adapter = new NavigationDrawerAdapter(getActivity(), getData());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -86,6 +88,7 @@ public class FragmentDrawer extends Fragment {
 
             }
         }));
+
 
         return layout;
     }
@@ -166,6 +169,7 @@ public class FragmentDrawer extends Fragment {
         @Override
         public void onTouchEvent(RecyclerView rv, MotionEvent e) {
         }
+
     }
 
     public interface FragmentDrawerListener {
