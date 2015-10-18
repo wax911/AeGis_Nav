@@ -41,10 +41,6 @@ public class SettingsActivity extends PreferenceActivity {
         //Adding a toolbar to the prefarance activity
         LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent();
         Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false);
-        bar.setTitle("Settings");
-        bar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        bar.setTitleTextColor(getResources().getColor(R.color.windowBackground));
-        bar.setLogo(R.mipmap.ic_launcher);
         root.addView(bar, 0); // insert at top
 
 
@@ -56,7 +52,6 @@ public class SettingsActivity extends PreferenceActivity {
 
         setupSimplePreferencesScreen();
     }
-
     /**
      * Shows the simplified settings UI if the device configuration if the
      * device configuration dictates that a simplified, single-pane UI should be

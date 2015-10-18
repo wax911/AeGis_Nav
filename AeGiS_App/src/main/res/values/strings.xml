@@ -19,6 +19,13 @@
         <item>@string/nav_item_extras</item>
     </string-array>
 
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_places</item>
+        <item>@drawable/ic_navi</item>
+        <item>@drawable/ic_extra</item>
+    </array>
+
     <string name="title_navigation">Navigation</string>
     <string name="title_barcodes">QR/Barcode Scanner</string>
     <string name="title_home">Home</string>
@@ -123,6 +130,7 @@
 
 
     <string name="greeting">Welcome Back</string>
+    <string name="action">Action</string>
 
     <!-- For Camera stuff -->
     <string name="ok">OK</string>

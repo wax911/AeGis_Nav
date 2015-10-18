@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import aegis.com.aegis.logic.INotify;
+
 /**
  * Created by Maxwell on 10/1/2015.
  */

@@ -22,7 +22,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -37,7 +36,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import aegis.com.aegis.R;
 import aegis.com.aegis.adapter.AutoCompleteAdapter;
 import aegis.com.aegis.logic.Location;
-import aegis.com.aegis.logic.Place_Abs;
 import aegis.com.aegis.logic.Places_Impl;
 import aegis.com.aegis.utility.ApiClientProvider;
 import aegis.com.aegis.utility.DismissKeyboard;

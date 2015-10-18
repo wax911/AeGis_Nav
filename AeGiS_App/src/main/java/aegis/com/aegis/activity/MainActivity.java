@@ -3,8 +3,8 @@ package aegis.com.aegis.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,30 +18,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import aegis.com.aegis.R;
-import aegis.com.aegis.adapter.AutoCompleteAdapter;
 import aegis.com.aegis.barcodereader.BarcodeCaptureActivity;
+import aegis.com.aegis.logic.Location;
 import aegis.com.aegis.logic.User;
-import aegis.com.aegis.utility.ApiClientProvider;
 import aegis.com.aegis.utility.AsyncRunner;
 import aegis.com.aegis.utility.DismissKeyboard;
 import aegis.com.aegis.utility.ImageStore;
@@ -66,10 +58,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private User user;
     private SharedPreferences.Editor _editor;
     private static final int RC_BARCODE_CAPTURE = 9001;
-    private String Result;
-    private AutoCompleteAdapter mAdapter;
     private Fragment fragment = null;
     private SearchView searchbar;
+    private Intent action = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +71,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab_QR);
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarColor));
         }
@@ -98,6 +90,20 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
+
+        InitUserElements();
+
+        fab.setOnClickListener(this);
+
+        if(savedInstanceState == null) {
+            // display the first navigation drawer view on app launch
+            displayView(0);
+        }
+    }
+
+    //Load names and images for the user
+    private void InitUserElements()
+    {
         Username = (TextView)findViewById(R.id.nav_greeting);
         Username.setText(getString(R.string.greeting) + " " + applicationSettings.getString("example_text", "User"));
 
@@ -122,12 +128,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         Username = (TextView) findViewById(R.id.nav_greeting);
         Username.setText(getString(R.string.greeting) + " " + applicationSettings.getString("example_text", "User"));
-        fab.setOnClickListener(this);
-
-        if(savedInstanceState == null) {
-            // display the first navigation drawer view on app launch
-            displayView(0);
-        }
     }
 
 
@@ -230,9 +230,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         //attempt to clean up resources
-        profile_pic = null;
+        profile_pic.setImageBitmap(null);
+
+        super.onDestroy();
     }
 
     @Override
@@ -263,13 +264,54 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
      *                    (various data can be attached to Intent "extras").
      */
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
-                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    Barcode Result = barcode;
-                    Snackbar.make(findViewById(R.id.drawer_layout),Result.displayValue,Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.ok),this).show();
+                    final Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+                    final String intentData = barcode.displayValue;
+                    Snackbar.make(findViewById(R.id.drawer_layout),barcode.displayValue,Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.action), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            switch (barcode.valueFormat)
+                            {
+                                case Barcode.GEO:
+                                    action = new Intent(MainActivity.this,NavigationActivity.class);
+                                    final double lat = barcode.geoPoint.lat;
+                                    final double lng = barcode.geoPoint.lng;
+                                    action.putExtra(IntentNames.MAP_INTENT_KEY, new Location("Place", lat, lng));
+                                    startActivity(action);
+                                    break;
+                                case Barcode.EMAIL:
+                                    //start intent to give a list of emailing apps
+                                    action = new Intent(Intent.ACTION_SEND);
+                                    action.setType("plain/text");
+                                    action.putExtra(Intent.EXTRA_EMAIL,intentData);
+                                    startActivity(action);
+                                    break;
+                                case Barcode.PHONE:
+                                    //open dialer
+                                    action = new Intent(Intent.ACTION_DIAL);
+                                    action.setData(Uri.parse("tel:"+intentData));
+                                    startActivity(action);
+                                    break;
+                                case Barcode.URL:
+                                    //open web page
+                                    action = new Intent(Intent.ACTION_VIEW);
+                                    action.setData(Uri.parse(intentData));
+                                    startActivity(action);
+                                    break;
+                                case Barcode.WIFI:
+                                    //do something with wifi details
+                                    action = new Intent(Intent.ACTION_MANAGE_NETWORK_USAGE);
+                                    break;
+                                default:
+                                    Toast.makeText(getApplication(),"No action set for this type of data "+barcode.valueFormat,Toast.LENGTH_LONG).show();
+                                    break;
+                            }
+                        }
+                    }).show();
                 } else {
                     new Notifier(this).Notify(null,getString(R.string.barcode_failure));
                 }

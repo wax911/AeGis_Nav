@@ -23,8 +23,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,18 +33,17 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.MultiProcessor;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
+
+import java.io.IOException;
 
 import aegis.com.aegis.R;
 import aegis.com.aegis.barcodereader.ui.camera.CameraSource;
 import aegis.com.aegis.barcodereader.ui.camera.CameraSourcePreview;
 import aegis.com.aegis.barcodereader.ui.camera.GraphicOverlay;
 import aegis.com.aegis.barcodereader.ui.camera.IDefault;
-
-import com.google.android.gms.vision.MultiProcessor;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
-
-import java.io.IOException;
 
 /**
  * detects barcodes and displays the value with the
@@ -368,7 +365,6 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements I
 
     private void ToggleFlash()
     {
-        //fab_flash.setAnimation(hyperspaceJumpAnimation);
         fab_flash.startAnimation(spin_it);
         if(currentDrawalbe == FLASH_DEFAULT_STATE)
         {

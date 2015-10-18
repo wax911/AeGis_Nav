@@ -189,9 +189,10 @@ public class LoginActivity extends AppCompatActivity implements
                         imgtemp = new ImageStore(this).getProfileImage();
                         profile.setImageBitmap(imgtemp);
                     }
-                    else
+                    else {
                         new AsyncRunner(profile, this).execute(user.getProfile_pic());
-                    imgtemp.recycle();
+                        Toast.makeText(this, "Image is being loaded, you may continue..", Toast.LENGTH_LONG).show();
+                    }
                 }
 
             } else {
@@ -409,6 +410,8 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
+        if(imgtemp != null)
+            imgtemp.recycle();
         super.onDestroy();
     }
 

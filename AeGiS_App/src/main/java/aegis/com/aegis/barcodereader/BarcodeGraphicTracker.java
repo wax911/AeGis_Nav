@@ -15,11 +15,11 @@
  */
 package aegis.com.aegis.barcodereader;
 
-import aegis.com.aegis.barcodereader.ui.camera.GraphicOverlay;
-
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;
+
+import aegis.com.aegis.barcodereader.ui.camera.GraphicOverlay;
 
 /**
  * Generic tracker which is used for tracking or reading a barcode (and can really be used for
@@ -28,6 +28,7 @@ import com.google.android.gms.vision.barcode.Barcode;
  * goes away.
  */
 class BarcodeGraphicTracker extends Tracker<Barcode> {
+
     private GraphicOverlay<BarcodeGraphic> mOverlay;
     private BarcodeGraphic mGraphic;
 

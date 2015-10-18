@@ -10,7 +10,7 @@ targetSdkVersion 22
 versionCode 1
 
 
-versionName '1.1.60'
+versionName '1.1.70'
     }
     buildTypes {
         release {

@@ -1,7 +1,5 @@
 package aegis.com.aegis.logic;
 
-import com.google.android.gms.plus.model.people.Person;
-
 import java.io.Serializable;
 
 /**

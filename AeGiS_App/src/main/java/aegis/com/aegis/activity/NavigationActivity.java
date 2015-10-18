@@ -54,19 +54,26 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_navigation);
 
+        l = (Location)getIntent().getSerializableExtra(IntentNames.MAP_INTENT_KEY);
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarColor));
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_maps);
+
         fab_mylocation = (FloatingActionButton)findViewById(R.id.fab_findme);
         fab_mylocation.setOnClickListener(this);
         if(mToolbar != null) {
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+            mToolbar.setLogo(R.drawable.ic_navi);
+            if(l!=null)
+                mToolbar.setTitle(" " + l.getName());
+            else
+                mToolbar.setTitle(" AeGis Free Mode");
         }
         applicationSettings = PreferenceManager.getDefaultSharedPreferences(this);
 
-        l = (Location)getIntent().getSerializableExtra(IntentNames.MAP_INTENT_KEY);
         if(l==null)
             l = new Location("O.R International Tambo" ,-26.1314138,28.2323354);
 
@@ -151,7 +158,7 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
                                    .newCameraPosition(new CameraPosition.Builder()
                                                               .target(new LatLng(l.getLat(), l.getLng())).zoom(19).build()));
 
-        MarkerOptions where = new MarkerOptions().position(new LatLng(l.getLat(), l.getLng())).title("Navigated to " + l.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).draggable(true);
+        MarkerOptions where = new MarkerOptions().position(new LatLng(l.getLat(), l.getLng())).title(l.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).draggable(true);
 
         mMap.addMarker(where);
 
@@ -165,8 +172,10 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
     private void drawPath(LatLng start, LatLng stop)
     {
         // Polylines are useful for marking paths and routes on the map.
-        mMap.addPolyline(new PolylineOptions().geodesic(true)
-                                 .add(start).add(stop)); // move marker to this point
+        mMap.addPolyline(new PolylineOptions()
+                                 .add(start)
+                                 .add(stop)
+                                 .geodesic(true)); // move marker to this point
     }
 
     private void animateCameraFollowUser(LatLng mapCenter)
@@ -174,7 +183,7 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
         // Flat markers will rotate when the map is rotated,
         // and change perspective when the map is tilted.
         mMap.addMarker(new MarkerOptions()
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_usermarker))
+                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_navigation))
                                .position(mapCenter)
                                .flat(true)
                                .rotation(245));
@@ -230,6 +239,11 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
             mMap.animateCamera(CameraUpdateFactory
                                        .newCameraPosition(new CameraPosition.Builder()
                                                                   .target(place.getLatLng()).zoom(19).build()));
+            mMap.addMarker(new MarkerOptions()
+                                   .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_navigation))
+                                   .position(place.getLatLng())
+                                   .flat(true)
+                                   .rotation(245));
 
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -258,6 +272,7 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
         Toast.makeText(this,"Long Touch",Toast.LENGTH_LONG).show();
         MarkerOptions usermarker = new MarkerOptions().position(latLng).title("Users Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_usermarker)).draggable(true);
         mMap.addMarker(usermarker);
+        startp = latLng;
     }
 
     @Override
@@ -282,18 +297,20 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
 
     @Override
     public void onMarkerDragStart(Marker marker) {
-        Toast.makeText(this,marker.getTitle()+" started moving "+marker.getPosition().toString(),Toast.LENGTH_LONG).show();
-        startp = marker.getPosition();
+        Toast.makeText(this,marker.getTitle()+" started moving "+marker.getPosition().toString(),Toast.LENGTH_SHORT).show();
+        if(stopp != null) {
+            startp = stopp;
+        }
     }
 
     @Override
     public void onMarkerDrag(Marker marker) {
-
+        //this is update on each dragging of the marker
     }
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
-        Toast.makeText(this,marker.getTitle()+" ended moving "+marker.getPosition().toString(),Toast.LENGTH_LONG).show();
+        Toast.makeText(this,marker.getTitle()+" ended moving "+marker.getPosition().toString(),Toast.LENGTH_SHORT).show();
         stopp = marker.getPosition();
         drawPath(startp,stopp);
     }

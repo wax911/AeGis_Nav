@@ -27,8 +27,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import aegis.com.aegis.R;
-
 /**
  * Created by Maxwell on 10/12/2015.
  */
