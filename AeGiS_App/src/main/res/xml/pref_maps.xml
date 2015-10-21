@@ -2,37 +2,37 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditTextPreference
-        android:key="pref_provider"
-        android:title="The name of the Map Provider"
-        android:defaultValue="Google"
-        android:selectAllOnFocus="true"
-        android:inputType="textCapWords"
         android:capitalize="words"
+        android:defaultValue="Google"
+        android:inputType="textCapWords"
+        android:key="pref_provider"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:maxLines="1" />
+        android:title="The name of the Map Provider"/>
 
     <CheckBoxPreference
+        android:defaultValue="false"
         android:key="pref_trafic_enabled"
-        android:title="Show traffic"
         android:summary="When zoomed out of indoor plan should the application display traffic on road in the form of colors?"
-        android:defaultValue="false" />
+        android:title="Show Traffic"/>
 
     <CheckBoxPreference
+        android:defaultValue="false"
         android:key="pref_buildings_enabled"
-        android:title="Show building outlines"
         android:summary="When zoomed out of an indoor map should the application show the building outline?"
-        android:defaultValue="false" />
+        android:title="Show Buildings"/>
 
     <CheckBoxPreference
+        android:defaultValue="true"
         android:key="pref_mylocation_enabled"
-        android:title="Display a locating button on top right corner of map screen"
         android:summary="The application will automatically snap to where you are on the map if this option is selected, but only when you click the button."
-        android:defaultValue="true" />
+        android:title="My Location"/>
 
     <CheckBoxPreference
+        android:defaultValue="false"
         android:key="pref_compass_enabled"
-        android:title="Should the application display a compass on top left of screen"
         android:summary="A little compass icon will be on the top left corner of the screen in the map screen, it will only show if you rotate the map."
-        android:defaultValue="false" />
+        android:title="Show Compass"/>
 
 </PreferenceScreen>

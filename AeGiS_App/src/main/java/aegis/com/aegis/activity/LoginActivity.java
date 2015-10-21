@@ -60,30 +60,23 @@ public class LoginActivity extends AppCompatActivity implements
     /* Keys for persisting instance variables in savedInstanceState */
     private static final String KEY_IS_RESOLVING = "is_resolving";
     private static final String KEY_SHOULD_RESOLVE = "should_resolve";
+    private static Snackbar login_notifications;
     private Bitmap imgtemp;
-
     /* Client for accessing Google APIs */
     private GoogleApiClient mGoogleApiClient;
-
     /* View to display current status (signed-in, signed-out, disconnected, etc) */
     private TextView mStatus;
-
     // [START resolution_variables]
     /* Is there a ConnectionResult resolution in progress? */
     private boolean mIsResolving = false;
-
     /* Should we automatically resolve ConnectionResults when possible? */
     private boolean mShouldResolve;
     private SharedPreferences applicationSettings;
-
     //Buttons
     private Button sign_out, disconnect, proceed;
     private SignInButton sign_in;
-
     //Classes
     private User user;
-
-    private static Snackbar login_notifications;
     private ImageView profile;
     private ViewGroup mRootView;
 
@@ -146,6 +139,14 @@ public class LoginActivity extends AppCompatActivity implements
                 .addScope(new Scope(Scopes.EMAIL))
                 .build();
         // [END create_google_api_client]
+
+        Snackbar.make(findViewById(R.id.main_layout), "Do you want to sign in as a guest?", Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.ok), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainStarter = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(mainStarter);
+            }
+        }).show();
     }
 
     private void updateUI(boolean isSignedIn){

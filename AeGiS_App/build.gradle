@@ -9,8 +9,11 @@ minSdkVersion 16
 targetSdkVersion 22
 versionCode 1
 
+    renderscriptTargetApi 23
+    renderscriptSupportModeEnabled true
 
-versionName '1.1.70'
+
+    versionName '1.1.70'
     }
     buildTypes {
         release {
@@ -24,7 +27,6 @@ versionName '1.1.70'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.google.android.gms:play-services:8.1.0'

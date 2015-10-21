@@ -3,14 +3,25 @@
 
 
     <ListPreference
-        android:key="pref_camera_framerate"
-        android:title="Camera Frame Rate"
-        android:summary="Frame rate represents the number of frames the camera or screen will show 15 jittery - 60 smooth,
-        Be warned increasing your framerate too much for a less powerful phone you experience poor performance"
+        android:defaultValue="15"
         android:entries="@array/pref_frame_rate_list"
         android:entryValues="@array/pref_frame_rate_values"
-        android:defaultValue="15"
+        android:key="pref_camera_framerate"
         android:negativeButtonText="@null"
-        android:positiveButtonText="@null" />
+        android:positiveButtonText="@null"
+        android:summary="Frame rate represents the number of frames the camera or screen will show 15 jittery - 60 smooth,
+        Be warned increasing your framerate too much for a less powerful phone you experience poor performance"
+        android:title="Camera Frame Rate"/>
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="Pretoria, SA"
+        android:inputType="textCapWords"
+        android:key="city"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="Enter the name of the city you are in the format of City, Country (City, CY)"
+        android:title="City Name"/>
 
 </PreferenceScreen>

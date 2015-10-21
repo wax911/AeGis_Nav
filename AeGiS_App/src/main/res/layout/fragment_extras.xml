@@ -1,0 +1,41 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@drawable/floor_plan_mp">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <include layout="@layout/loading_bar"/>
+
+    <RelativeLayout
+        android:id="@+id/rect"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/contain"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|bottom"
+            android:layout_margin="@dimen/fab_compat_margin"
+            android:src="@drawable/ic_cast_dark"
+            app:backgroundTint="@color/fab_tint"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"
+            app:rippleColor="@color/fab_ripple"/>
+
+    </FrameLayout>
+
+
+</FrameLayout>
