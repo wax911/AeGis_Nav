@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AeGiS_App/AeGiS_App.iml" filepath="$PROJECT_DIR$/AeGiS_App/AeGiS_App.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AeGis_Nav-1.iml" filepath="$PROJECT_DIR$/AeGis_Nav-1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AeGis_Nav.iml" filepath="$PROJECT_DIR$/AeGis_Nav.iml" />
     </modules>
   </component>
 </project>
