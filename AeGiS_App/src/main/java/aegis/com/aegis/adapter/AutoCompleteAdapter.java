@@ -27,6 +27,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import aegis.com.aegis.R;
+
 /**
  * Created by Maxwell on 10/12/2015.
  */
@@ -35,6 +37,8 @@ public class AutoCompleteAdapter
 
     private static final String TAG = "PlaceAutocompleteAdapter";
     private static final CharacterStyle STYLE_BOLD = new StyleSpan(Typeface.BOLD);
+    private TextView title, details;
+
     /**
      * Current results returned by this adapter.
      */
@@ -62,7 +66,7 @@ public class AutoCompleteAdapter
      */
     public AutoCompleteAdapter(Context context, GoogleApiClient googleApiClient,
                                     LatLngBounds bounds, AutocompleteFilter filter) {
-        super(context, android.R.layout.simple_expandable_list_item_2, android.R.id.text1);
+        super(context, R.layout.autocompleter, R.id.mainTitle);
         mGoogleApiClient = googleApiClient;
         mBounds = bounds;
         mPlaceFilter = filter;
@@ -102,13 +106,10 @@ public class AutoCompleteAdapter
 
         AutocompletePrediction item = getItem(position);
 
-        TextView textView1 = (TextView) row.findViewById(android.R.id.text1);
-        TextView textView2 = (TextView) row.findViewById(android.R.id.text2);
-        textView1.setTextColor(Color.WHITE);
-        textView2.setTextColor(Color.WHITE);
-        textView1.setText(item.getPrimaryText(STYLE_BOLD));
-        textView2.setText(item.getSecondaryText(STYLE_BOLD));
-
+        title = (TextView) row.findViewById(R.id.mainTitle);
+        details = (TextView) row.findViewById(R.id.placeTitle);
+        title.setText(item.getPrimaryText(STYLE_BOLD));
+        details.setText(item.getSecondaryText(STYLE_BOLD));
         return row;
     }
 
