@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.text.Html;
@@ -22,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -93,9 +95,11 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
                 root.findViewById(R.id.autocomplete_places);
         mRating = (RatingBar)root.findViewById(R.id.place_rating);
 
-        //Changing the color of the stars in our application
-        LayerDrawable stars = (LayerDrawable) mRating.getProgressDrawable();
-        stars.getDrawable(2).setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //Changing the color of the stars in our application
+            LayerDrawable stars = (LayerDrawable) mRating.getProgressDrawable();
+            stars.getDrawable(2).setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        }
 
         // Register a listener that receives callbacks when a suggestion has been selected
         mAutocompleteView.setOnItemClickListener(this);
@@ -221,6 +225,7 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
     public void onResult(PlaceBuffer places) {
         if (!places.getStatus().isSuccess()) {
             // Request did not complete successfully
+            Toast.makeText(getActivity(), "Place query did not complete. Error: " + places.getStatus().toString(), Toast.LENGTH_SHORT).show();
             Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
             places.release();
             return;

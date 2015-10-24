@@ -15,8 +15,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Fade;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -420,9 +418,9 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     public void onClick(View v)
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             TransitionManager.beginDelayedTransition(mRootView, new Fade());
-        }
+        }*/
         switch (v.getId()) {
             case R.id.sign_in_button:
                 onSignInClicked();

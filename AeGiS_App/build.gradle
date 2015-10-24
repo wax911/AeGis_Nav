@@ -13,7 +13,7 @@ versionCode 1
     renderscriptSupportModeEnabled true
 
 
-    versionName '1.1.70'
+    versionName '1.1.75'
     }
     buildTypes {
         release {

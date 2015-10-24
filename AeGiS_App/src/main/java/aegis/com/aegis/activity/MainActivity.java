@@ -231,7 +231,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         switch (v.getId())
         {
             case R.id.fab_QR:
-                fab.startAnimation(spin);
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    fab.startAnimation(spin);
+                else
+                    onAnimationEnd(null);
                 break;
         }
     }
