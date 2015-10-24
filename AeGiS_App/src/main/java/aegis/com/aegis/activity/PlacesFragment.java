@@ -109,8 +109,6 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
         mPlaceDetailsText = (TextView) root.findViewById(R.id.place_details);
         mPlaceDetailsAttribution = (TextView) root.findViewById(R.id.place_attribution);
 
-        SetProperties();
-
         // Set up the 'clear text' button that clears the text in the autocomplete view
         clearButton = (ImageButton) root.findViewById(R.id.button_clear);
         clearButton.setOnClickListener(this);
@@ -124,6 +122,8 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
             data = reciever.getString(IntentNames.Search_View_KEY, null);
             mAutocompleteView.setText(data);
         }
+
+        SetProperties();
 
         return root;
     }
@@ -162,6 +162,7 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
     public void onDetach()
     {
         super.onDetach();
+        mGoogleApiClient = null;
     }
 
 
@@ -252,7 +253,7 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
 
         mRating.setRating(place.getRating() * 10);
 
-        if (mRating.getRating() < 0f) {
+        if (mRating.getRating() < 0) {
             Snackbar.make(getActivity().findViewById(R.id.Places_screen), desired_place.getPlace_cord().getName() + " doesn't have ratings yet.", Snackbar.LENGTH_LONG).show();
         }
 

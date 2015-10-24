@@ -75,7 +75,7 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
         applicationSettings = PreferenceManager.getDefaultSharedPreferences(this);
 
         if(l==null)
-            l = new Location("O.R International Tambo" ,-26.1314138,28.2323354);
+            l = new Location("Belgium Campus" ,-25.6840875,28.1315539);
 
         setUpMapIfNeeded();
     }
@@ -83,7 +83,6 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Toast.makeText(getApplicationContext(),"Cleaning up..",Toast.LENGTH_LONG).show();
         gov.remove();
         finish();
     }
@@ -104,12 +103,7 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
-            return true;
-        }
-
-        if(id == R.id.action_search){
-            Toast.makeText(getApplicationContext(), "Search action is selected!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
             return true;
         }
 
@@ -137,7 +131,7 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
     private void setUpMap()
     {
         LatLng campus = new LatLng(-25.6840875,28.1315539);
-        goo = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.floor_plan2)).position(campus,200f, 200f).bearing(19f);
+        goo = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.floor_plan_mp)).position(campus,200f, 200f).bearing(199f);
         gov = mMap.addGroundOverlay(goo);
 
         applyPreference();
@@ -158,14 +152,14 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
                                    .newCameraPosition(new CameraPosition.Builder()
                                                               .target(new LatLng(l.getLat(), l.getLng())).zoom(19).build()));
 
-        MarkerOptions where = new MarkerOptions().position(new LatLng(l.getLat(), l.getLng())).title(l.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).draggable(true);
+        MarkerOptions where = new MarkerOptions().position(new LatLng(l.getLat(), l.getLng())).title(l.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).draggable(false);
 
         mMap.addMarker(where);
 
         MarkerOptions inzeta = new MarkerOptions().position(new LatLng(-25.6842879, 28.1311748)).title("Zeta");
         mMap.addMarker(inzeta);
 
-        MarkerOptions newcenter = new MarkerOptions().position(new LatLng(-25.6841985, 28.1315539)).title("new center zone").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker));
+        MarkerOptions newcenter = new MarkerOptions().position(new LatLng(-25.6841985, 28.1315539)).title("new center zone").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).draggable(false);
         mMap.addMarker(newcenter);
     }
 
