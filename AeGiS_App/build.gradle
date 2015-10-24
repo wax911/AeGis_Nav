@@ -1,19 +1,19 @@
 apply plugin: 'com.android.application'
 
 android {
-compileSdkVersion 23
-buildToolsVersion '23.0.1'
-defaultConfig {
-applicationId 'aegis.com.aegisnav'
-minSdkVersion 16
-targetSdkVersion 22
-versionCode 1
+    compileSdkVersion 21
+    buildToolsVersion '21.1.1'
+    defaultConfig {
+        applicationId 'aegis.com.aegisnav'
+        minSdkVersion 16
+        targetSdkVersion 22
+        versionCode 1
 
-    renderscriptTargetApi 23
-    renderscriptSupportModeEnabled true
+        renderscriptTargetApi 23
+        renderscriptSupportModeEnabled true
 
 
-    versionName '1.1.75'
+        versionName '1.1.80'
     }
     buildTypes {
         release {
