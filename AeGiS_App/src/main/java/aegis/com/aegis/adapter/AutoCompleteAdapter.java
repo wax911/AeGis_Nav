@@ -1,11 +1,11 @@
 package aegis.com.aegis.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -58,6 +58,7 @@ public class AutoCompleteAdapter
      * The autocomplete filter used to restrict queries to a specific set of place types.
      */
     private AutocompleteFilter mPlaceFilter;
+    private Context context;
 
     /**
      * Initializes with a resource for text rows and autocomplete query bounds.
@@ -67,6 +68,7 @@ public class AutoCompleteAdapter
     public AutoCompleteAdapter(Context context, GoogleApiClient googleApiClient,
                                     LatLngBounds bounds, AutocompleteFilter filter) {
         super(context, R.layout.autocompleter, R.id.mainTitle);
+        this.context = context;
         mGoogleApiClient = googleApiClient;
         mBounds = bounds;
         mPlaceFilter = filter;
@@ -98,19 +100,23 @@ public class AutoCompleteAdapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        View row = super.getView(position, convertView, parent);
+        LayoutInflater mInflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //View row = super.getView(position, convertView, parent);
 
+        convertView = mInflater.inflate(R.layout.autocompleter,
+                                        parent, false);
         // Sets the primary and secondary text for a row.
         // Note that getPrimaryText() and getSecondaryText() return a CharSequence that may contain
         // styling based on the given CharacterStyle.
 
         AutocompletePrediction item = getItem(position);
 
-        title = (TextView) row.findViewById(R.id.mainTitle);
-        details = (TextView) row.findViewById(R.id.placeTitle);
+        title = (TextView) convertView.findViewById(R.id.mainTitle);
+        details = (TextView) convertView.findViewById(R.id.placeTitle);
         title.setText(item.getPrimaryText(STYLE_BOLD));
         details.setText(item.getSecondaryText(STYLE_BOLD));
-        return row;
+        return convertView;
     }
 
     /**

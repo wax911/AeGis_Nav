@@ -5,10 +5,10 @@
     <color name="textColorPrimary">#000000</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#1a292c</color>
-    <color name="colorAccent">@color/accent_material_light</color>
+    <color name="colorAccent">#ff009688</color>
     <color name="fab_tint">#fd1843</color>
     <color name="fab_ripple">#FFFFFF</color>
-    <color name="colorWhiteText">@color/fab_ripple</color>
+    <color name="colorWhiteText">#FFFFFF</color>
 <!-- More editions -->
     <color name="blue_grey_500">#607D8B</color>
     <color name="blue_grey_600">#546E7A</color>

@@ -13,7 +13,7 @@ android {
         renderscriptSupportModeEnabled true
 
 
-        versionName '1.1.80.1'
+        versionName '1.1.80.2'
     }
     buildTypes {
         release {
