@@ -34,7 +34,7 @@ public class Notifier implements INotify
 
         if (applicationSettings.getBoolean("pref_notify_me", true))
         {
-            NotificationCompat.Builder mbuilder = new NotificationCompat.Builder(application.getApplicationContext()).setSmallIcon(R.mipmap.ic_launcher)
+            NotificationCompat.Builder mbuilder = new NotificationCompat.Builder(application.getApplicationContext()).setSmallIcon(R.mipmap.ic_notification)
                      .setContentTitle(Title == null ? "Aegis": Title)
                      .setSound(Uri.parse(notification))
                      .setContentText(Message)
