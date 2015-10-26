@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -272,6 +273,18 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Snackbar.make(findViewById(R.id.main_layout), "Do you want to sign in as a guest?", Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.ok), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainStarter = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(mainStarter);
+            }
+        }).show();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         mGoogleApiClient.disconnect();
@@ -318,6 +331,8 @@ public class LoginActivity extends AppCompatActivity implements
             }
         }
     }
+
+
 
     // [START on_connected]
     @Override

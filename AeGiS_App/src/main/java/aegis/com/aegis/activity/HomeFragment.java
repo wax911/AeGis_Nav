@@ -1,7 +1,9 @@
 package aegis.com.aegis.activity;
 
 
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -19,6 +21,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import aegis.com.aegis.R;
+import aegis.com.aegis.utility.BlurBuilder;
 import aegis.com.aegis.utility.CityPreference;
 import aegis.com.aegis.utility.RemoteFetch;
 
@@ -48,7 +51,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         detailsField = (TextView) rootView.findViewById(R.id.details_field);
         currentTemperatureField = (TextView) rootView.findViewById(R.id.current_temperature_field);
         weatherIcon = (TextView) rootView.findViewById(R.id.weather_icon);
-        //rootView.setBackgroundDrawable(new BitmapDrawable(getResources(), BlurBuilder.blur(getActivity(), BitmapFactory.decodeResource(getResources(),R.drawable.ic_70s_design))));
         weatherIcon.setTypeface(weatherFont);
         return rootView;
     }
@@ -57,14 +59,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weathericons.ttf");
-        updateWeatherData(new CityPreference(getActivity()).getCity());
+        updateWeatherData();
     }
 
 
-    private void updateWeatherData(final String city) {
+    private void updateWeatherData() {
         new Thread() {
             public void run() {
-                final JSONObject json = RemoteFetch.getJSON(getActivity(), city);
+                final JSONObject json = RemoteFetch.getJSON(new CityPreference(getActivity()).getCity());
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
@@ -146,10 +148,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             }
         }
         weatherIcon.setText(icon);
-    }
-
-    public void changeCity(String city) {
-        updateWeatherData(city);
     }
 
     @Override

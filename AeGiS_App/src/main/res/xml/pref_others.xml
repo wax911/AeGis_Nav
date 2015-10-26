@@ -15,13 +15,13 @@
 
     <EditTextPreference
         android:capitalize="words"
-        android:defaultValue="Pretoria, SA"
+        android:defaultValue="Pretoria"
         android:inputType="textCapWords"
         android:key="city"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:summary="Enter the name of the city you are in the format of City, Country (City, CY)"
+        android:summary="Enter the name of the city you are in the format of Name of City"
         android:title="City Name"/>
 
 </PreferenceScreen>

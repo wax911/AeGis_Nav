@@ -5,24 +5,30 @@ package aegis.com.aegis.utility;
  */
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class CityPreference {
 
-    SharedPreferences prefs;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor _editor;
 
     public CityPreference(Activity activity) {
-        prefs = activity.getPreferences(Activity.MODE_PRIVATE);
+        prefs = PreferenceManager.getDefaultSharedPreferences(activity);
     }
 
     // If the user has not chosen a city yet, return
     // Sydney as the default city
     public String getCity() {
-        return prefs.getString("city", "Pretoria, SA");
+        return prefs.getString("city", "Pretoria");
     }
 
-    public void setCity(String city) {
-        prefs.edit().putString("city", city).commit();
+    public void setCity(String city)
+    {
+        _editor = prefs.edit();
+        _editor.putString("city", city);
+        _editor.commit();
     }
 
 }
