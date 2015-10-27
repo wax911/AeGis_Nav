@@ -1,16 +1,18 @@
 package aegis.com.aegis.activity;
 
 
-import android.graphics.BitmapFactory;
+import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,22 +23,20 @@ import java.util.Date;
 import java.util.Locale;
 
 import aegis.com.aegis.R;
-import aegis.com.aegis.utility.BlurBuilder;
 import aegis.com.aegis.utility.CityPreference;
 import aegis.com.aegis.utility.RemoteFetch;
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
-    Typeface weatherFont;
-
-    TextView cityField;
-    TextView updatedField;
-    TextView detailsField;
-    TextView currentTemperatureField;
-    TextView weatherIcon;
-
     Handler handler;
+    private Typeface weatherFont;
+    private TextView cityField;
+    private TextView updatedField;
+    private TextView detailsField;
+    private TextView currentTemperatureField;
+    private TextView weatherIcon;
+    private ImageView places, maps, extras;
 
     public HomeFragment() {
         handler = new Handler();
@@ -52,6 +52,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         currentTemperatureField = (TextView) rootView.findViewById(R.id.current_temperature_field);
         weatherIcon = (TextView) rootView.findViewById(R.id.weather_icon);
         weatherIcon.setTypeface(weatherFont);
+        places = (ImageView) rootView.findViewById(R.id.places);
+        maps = (ImageView) rootView.findViewById(R.id.maps);
+        extras = (ImageView) rootView.findViewById(R.id.extras);
+        places.setOnClickListener(this);
+        maps.setOnClickListener(this);
+        extras.setOnClickListener(this);
+
         return rootView;
     }
 
@@ -150,8 +157,50 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         weatherIcon.setText(icon);
     }
 
+    public void displayView(int position) {
+        Fragment fragment = null;
+        String title = getString(R.string.app_name);
+        switch (position) {
+            case 0:
+                fragment = new HomeFragment();
+                title = getString(R.string.title_home);
+                break;
+            case 1:
+                fragment = new PlacesFragment();
+                title = getString(R.string.title_places);
+                break;
+            case 2:
+                startActivity(new Intent(getActivity(), NavigationActivity.class));
+                title = getString(R.string.title_navigation);
+                break;
+            case 3:
+                fragment = new ExtrasFragment();
+                title = getString(R.string.title_extras);
+                break;
+            default:
+                break;
+        }
+
+        if (fragment != null) {
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.commit();
+        }
+    }
+
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.places:
+                displayView(1);
+                break;
+            case R.id.maps:
+                displayView(2);
+                break;
+            case R.id.extras:
+                displayView(3);
+                break;
+        }
     }
 }

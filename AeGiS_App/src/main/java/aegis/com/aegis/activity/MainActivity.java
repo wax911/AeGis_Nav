@@ -4,10 +4,7 @@ package aegis.com.aegis.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +36,6 @@ import aegis.com.aegis.barcodereader.BarcodeCaptureActivity;
 import aegis.com.aegis.logic.Location;
 import aegis.com.aegis.logic.User;
 import aegis.com.aegis.utility.AsyncRunner;
-import aegis.com.aegis.utility.BlurBuilder;
 import aegis.com.aegis.utility.DismissKeyboard;
 import aegis.com.aegis.utility.ImageStore;
 import aegis.com.aegis.utility.IntentNames;
@@ -50,7 +45,6 @@ import aegis.com.aegis.utility.Notifier;
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, SearchView.OnQueryTextListener, Animation.AnimationListener
 {
-
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static String TAG = MainActivity.class.getSimpleName();
     private static Animation spin;
@@ -65,6 +59,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private Fragment fragment = null;
     private SearchView searchbar;
     private Intent action = null;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +127,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         Username.setText(getString(R.string.greeting) + " " + applicationSettings.getString("example_text", "User"));
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -145,7 +139,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         searchbar.setSubmitButtonEnabled(true);
         return true;
     }
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig)
@@ -199,7 +192,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_places);
                 break;
             case 2:
-
                 startActivity(new Intent(this, NavigationActivity.class));
                 title = getString(R.string.title_navigation);
                 break;
@@ -236,7 +228,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         switch (v.getId())
         {
             case R.id.fab_QR:
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
                     fab.startAnimation(spin);
                 else
                     onAnimationEnd(null);
@@ -323,7 +315,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
     }
 
-
     @Override
     public boolean onQueryTextSubmit(String query)
     {
@@ -344,13 +335,12 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onAnimationStart(Animation animation) {
-
+        // launch barcode activity.
+        intent = new Intent(MainActivity.this, BarcodeCaptureActivity.class);
     }
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        // launch barcode activity.
-        Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
 

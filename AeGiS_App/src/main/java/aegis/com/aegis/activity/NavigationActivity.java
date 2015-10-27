@@ -25,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.GroundOverlay;
@@ -48,6 +49,9 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
     private Location l;
     private SharedPreferences applicationSettings;
     private FloatingActionButton fab_mylocation;
+    private BitmapDescriptor overlay;
+    private LatLng startp;
+    private LatLng stopp;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,8 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
             getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarColor));
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_maps);
+
+        overlay = BitmapDescriptorFactory.fromResource(R.drawable.floor_plan_mp);
 
         fab_mylocation = (FloatingActionButton)findViewById(R.id.fab_findme);
         fab_mylocation.setOnClickListener(this);
@@ -131,9 +137,8 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
     private void setUpMap()
     {
         LatLng campus = new LatLng(-25.6840875,28.1315539);
-        goo = new GroundOverlayOptions().image(BitmapDescriptorFactory.fromResource(R.drawable.floor_plan_mp)).position(campus,200f, 200f).bearing(199f);
+        goo = new GroundOverlayOptions().image(overlay).position(campus, 200f, 200f).bearing(199f);
         gov = mMap.addGroundOverlay(goo);
-
         applyPreference();
 
         if(!mMap.isIndoorEnabled())
@@ -244,7 +249,6 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
         }
     }
 
-
     private void applyPreference()
     {
         mMap.setTrafficEnabled(applicationSettings.getBoolean("pref_trafic_enabled",false));
@@ -280,7 +284,6 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
         }
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         if(mMap == null) {
@@ -309,6 +312,5 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
         drawPath(startp,stopp);
     }
 
-    private LatLng startp;
-    private LatLng stopp;
+
 }

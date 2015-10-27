@@ -30,7 +30,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
@@ -83,12 +82,15 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
         // events. If your activity does not extend FragmentActivity, make sure to call connect()
         // and disconnect() explicitly.
         mGoogleApiClient = ApiClientProvider.getInstance(this, getActivity());
-        reciever = this.getArguments();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        reciever = this.getArguments();
+        if (!mGoogleApiClient.isConnected())
+            mGoogleApiClient = ApiClientProvider.getInstance(this, getActivity());
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_places, container, false);
         // Retrieve the AutoCompleteTextView that will display Place_Abs suggestions.
