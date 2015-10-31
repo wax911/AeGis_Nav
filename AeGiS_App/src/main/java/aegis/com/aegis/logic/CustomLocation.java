@@ -5,12 +5,18 @@ import java.io.Serializable;
 /**
  * Created by Maxwell on 10/2/2015.
  */
-public class Location implements Serializable
+public class CustomLocation implements Serializable
 {
     private String name;
     //because latlng is not serializable i think
     private double lng;
     private double lat;
+
+    public CustomLocation(String place, double lat, double lng) {
+        name = place;
+        this.lng = lng;
+        this.lat = lat;
+    }
 
     public double getLng() {
         return lng;
@@ -30,13 +36,5 @@ public class Location implements Serializable
 
     public String getName() {
         return name;
-    }
-
-
-    public Location(String place, double lat, double lng)
-    {
-        name = place;
-        this.lng = lng;
-        this.lat = lat;
     }
 }

@@ -3,6 +3,8 @@ package aegis.com.aegis.activity;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -13,8 +15,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONObject;
 
@@ -23,11 +28,13 @@ import java.util.Date;
 import java.util.Locale;
 
 import aegis.com.aegis.R;
+import aegis.com.aegis.utility.AsyncFunction;
 import aegis.com.aegis.utility.CityPreference;
+import aegis.com.aegis.utility.LastLocationProvider;
 import aegis.com.aegis.utility.RemoteFetch;
 
 
-public class HomeFragment extends Fragment implements View.OnClickListener{
+public class HomeFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, View.OnClickListener {
 
     Handler handler;
     private Typeface weatherFont;
@@ -37,6 +44,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private TextView currentTemperatureField;
     private TextView weatherIcon;
     private ImageView places, maps, extras;
+    private ProgressBar spinner;
+    private Location mylocation;
+    private LastLocationProvider provider;
+    private AsyncFunction backgroundRunner;
+
 
     public HomeFragment() {
         handler = new Handler();
@@ -46,6 +58,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        spinner = (ProgressBar) rootView.findViewById(R.id.loading);
+        spinner.setVisibility(View.VISIBLE);
         cityField = (TextView) rootView.findViewById(R.id.city_field);
         updatedField = (TextView) rootView.findViewById(R.id.updated_field);
         detailsField = (TextView) rootView.findViewById(R.id.details_field);
@@ -58,7 +72,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         places.setOnClickListener(this);
         maps.setOnClickListener(this);
         extras.setOnClickListener(this);
-
+        provider.onStart();
         return rootView;
     }
 
@@ -66,9 +80,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weathericons.ttf");
-        updateWeatherData();
+        provider = new LastLocationProvider(getContext(), this);
     }
-
 
     private void updateWeatherData() {
         new Thread() {
@@ -77,15 +90,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
-                            Toast.makeText(getActivity(),
-                                           getActivity().getString(R.string.place_not_found),
-                                           Toast.LENGTH_LONG).show();
+                            try {
+                                Toast.makeText(getActivity(),
+                                               getActivity().getString(R.string.place_not_found),
+                                               Toast.LENGTH_LONG).show();
+                                spinner.setVisibility(View.INVISIBLE);
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                 } else {
                     handler.post(new Runnable() {
                         public void run() {
                             renderWeather(json);
+                            spinner.setVisibility(View.INVISIBLE);
                         }
                     });
                 }
@@ -159,23 +178,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     public void displayView(int position) {
         Fragment fragment = null;
-        String title = getString(R.string.app_name);
         switch (position) {
             case 0:
                 fragment = new HomeFragment();
-                title = getString(R.string.title_home);
                 break;
             case 1:
                 fragment = new PlacesFragment();
-                title = getString(R.string.title_places);
                 break;
             case 2:
                 startActivity(new Intent(getActivity(), NavigationActivity.class));
-                title = getString(R.string.title_navigation);
                 break;
             case 3:
                 fragment = new ExtrasFragment();
-                title = getString(R.string.title_extras);
                 break;
             default:
                 break;
@@ -202,5 +216,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 displayView(3);
                 break;
         }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mylocation = provider.Retreive();
+
+        Geocoder gcd = new Geocoder(getContext(), Locale.getDefault());
+        backgroundRunner = new AsyncFunction(mylocation, getActivity());
+        backgroundRunner.execute(gcd);
+        Toast.makeText(getContext(), "Obtaining your CustomLocation, Please wait..", Toast.LENGTH_LONG).show();
+        updateWeatherData();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        //for some reason we lost the connection to google play services
+        provider.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        updateWeatherData();
     }
 }

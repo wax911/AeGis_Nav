@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="pref_camera_autocapture"
+        android:summary="Enable to allow barcode scanner to automatically capture barcodes for you"
+        android:title="Auto Capture"/>
 
     <ListPreference
-        android:defaultValue="15"
+        android:defaultValue="30"
         android:entries="@array/pref_frame_rate_list"
         android:entryValues="@array/pref_frame_rate_values"
         android:key="pref_camera_framerate"
@@ -14,8 +19,7 @@
         android:title="Camera Frame Rate"/>
 
     <EditTextPreference
-        android:capitalize="words"
-        android:defaultValue="Pretoria"
+        android:defaultValue="Johannesburg"
         android:inputType="textCapWords"
         android:key="city"
         android:maxLines="1"

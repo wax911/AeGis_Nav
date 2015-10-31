@@ -8,9 +8,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -36,6 +38,7 @@ import com.google.android.gms.search.SearchAuth;
 
 import aegis.com.aegis.R;
 import aegis.com.aegis.logic.User;
+import aegis.com.aegis.utility.AlertManager;
 import aegis.com.aegis.utility.AsyncRunner;
 import aegis.com.aegis.utility.ImageStore;
 
@@ -46,7 +49,8 @@ public class LoginActivity extends AppCompatActivity implements
                                                      View.OnClickListener,
                                                      ActivityCompat.OnRequestPermissionsResultCallback,
                                                      GoogleApiClient.ConnectionCallbacks,
-                                                     GoogleApiClient.OnConnectionFailedListener {
+                                                     GoogleApiClient.OnConnectionFailedListener,
+                                                     DialogInterface.OnClickListener {
 
     private static final String TAG = "Login";
 
@@ -78,12 +82,13 @@ public class LoginActivity extends AppCompatActivity implements
     private User user;
     private ImageView profile;
     private ViewGroup mRootView;
+    private LocationManager lm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
+        lm = (LocationManager) getSystemService(LOCATION_SERVICE);
         mRootView = (ViewGroup) findViewById(R.id.main_layout);
         mRootView.setOnClickListener(this);
 
@@ -146,6 +151,10 @@ public class LoginActivity extends AppCompatActivity implements
                 startActivity(mainStarter);
             }
         }).show();
+
+        if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                !lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+            new AlertManager(this, this).Create("Location Services Disabled", this.getString(R.string.LocationMsg));
     }
 
     private void updateUI(boolean isSignedIn){
@@ -170,8 +179,6 @@ public class LoginActivity extends AppCompatActivity implements
                     user.setEmail(Plus.AccountApi.getAccountName(mGoogleApiClient));
                     ((TextView) findViewById(R.id.email)).setText(user.getEmail());
                 }
-
-
 
                 if(!applicationSettings.getBoolean("stored_info",false) && profile_link != null)
                 {
@@ -297,6 +304,13 @@ public class LoginActivity extends AppCompatActivity implements
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_IS_RESOLVING, mIsResolving);
         outState.putBoolean(KEY_SHOULD_RESOLVE, mShouldResolve);
+        Snackbar.make(findViewById(R.id.main_layout), "Do you want to sign in as a guest?", Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.ok), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainStarter = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(mainStarter);
+            }
+        }).show();
     }
     // [END on_save_instance_state]
 
@@ -502,4 +516,18 @@ public class LoginActivity extends AppCompatActivity implements
         showSignedOutUI();
     }
     // [END on_disconnect_clicked]
+
+    /**
+     * This method will be invoked when a button in the dialog is clicked.
+     *
+     * @param dialog The dialog that received the click.
+     * @param which  The button that was clicked (e.g.
+     *               {@link DialogInterface#BUTTON1}) or the position
+     */
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        // Show location settings when the user acknowledges the alert dialog
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+    }
 }

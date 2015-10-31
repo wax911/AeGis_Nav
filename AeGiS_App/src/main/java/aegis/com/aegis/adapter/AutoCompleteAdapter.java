@@ -102,7 +102,6 @@ public class AutoCompleteAdapter
     {
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //View row = super.getView(position, convertView, parent);
 
         convertView = mInflater.inflate(R.layout.autocompleter,
                                         parent, false);

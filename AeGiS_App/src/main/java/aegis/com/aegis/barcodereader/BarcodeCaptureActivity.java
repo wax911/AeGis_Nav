@@ -44,6 +44,7 @@ import aegis.com.aegis.barcodereader.ui.camera.CameraSource;
 import aegis.com.aegis.barcodereader.ui.camera.CameraSourcePreview;
 import aegis.com.aegis.barcodereader.ui.camera.GraphicOverlay;
 import aegis.com.aegis.barcodereader.ui.camera.IDefault;
+import aegis.com.aegis.utility.IntentNames;
 
 /**
  * detects barcodes and displays the value with the
@@ -52,26 +53,17 @@ import aegis.com.aegis.barcodereader.ui.camera.IDefault;
  */
 public final class BarcodeCaptureActivity extends AppCompatActivity implements IDefault,OnClickListener
 {
+    public static final String BarcodeObject = "Barcode";
+    private static final String TAG = "Barcode-reader";
+    private static Animation spin_it;
     private FloatingActionButton fab_flash;
     private FloatingActionButton fab_capture;
     private SharedPreferences applicationSettings;
-
-    private static final String TAG = "Barcode-reader";
-
-    // intent request code to handle updating play services if needed.
-    private static final int RC_HANDLE_GMS = 9001;
-
-    // permission request codes need to be < 256
-    private static final int RC_HANDLE_CAMERA_PERM = 2;
-
-    public static final String BarcodeObject = "Barcode";
-
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
     private GraphicOverlay<BarcodeGraphic> mGraphicOverlay;
-
     private int currentDrawalbe;
-    private static Animation spin_it;
+    private boolean isAutocapture;
 
 
     /**
@@ -85,6 +77,10 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements I
 
         applicationSettings = PreferenceManager.getDefaultSharedPreferences(this);
 
+        ActivitySource.caller = this;
+        isAutocapture = applicationSettings.getBoolean("pref_camera_autocapture", false);
+        ActivitySource.isAuto = isAutocapture;
+
         currentDrawalbe = FLASH_DEFAULT_STATE;
         spin_it = AnimationUtils.loadAnimation(this, R.anim.rotate_it);
 
@@ -93,9 +89,13 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements I
 
         //Our floating buttons for turning flash on and taking an image of barcode
         fab_flash = (FloatingActionButton)findViewById(R.id.fab_flashtoogle);
-        fab_capture = (FloatingActionButton)findViewById(R.id.fab_captureQR);
         fab_flash.setOnClickListener(this);
-        fab_capture.setOnClickListener(this);
+        fab_capture = (FloatingActionButton) findViewById(R.id.fab_captureQR);
+
+        if (isAutocapture)
+            fab_capture.setVisibility(View.GONE);
+        else
+            fab_capture.setOnClickListener(this);
 
         fab_flash.setImageResource(FLASH_DEFAULT_STATE);
 
@@ -126,7 +126,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements I
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
                                                                  Manifest.permission.CAMERA)) {
-            ActivityCompat.requestPermissions(this, permissions, RC_HANDLE_CAMERA_PERM);
+            ActivityCompat.requestPermissions(this, permissions, IntentNames.RC_HANDLE_CAMERA_PERM);
             return;
         }
 
@@ -136,7 +136,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements I
             @Override
             public void onClick(View view) {
                 ActivityCompat.requestPermissions(thisActivity, permissions,
-                                                  RC_HANDLE_CAMERA_PERM);
+                                                  IntentNames.RC_HANDLE_CAMERA_PERM);
             }
         };
 
@@ -199,7 +199,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements I
         CameraSource.Builder builder = new CameraSource.Builder(getApplicationContext(), barcodeDetector)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedPreviewSize(metrics.widthPixels*2, metrics.heightPixels*2)
-                .setRequestedFps(Float.parseFloat(applicationSettings.getString("pref_camera_framerate","15.0")));
+                .setRequestedFps(Float.parseFloat(applicationSettings.getString("pref_camera_framerate", "30.0")));
 
         // make sure that auto focus is an available option
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -263,7 +263,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements I
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
-        if (requestCode != RC_HANDLE_CAMERA_PERM) {
+        if (requestCode != IntentNames.RC_HANDLE_CAMERA_PERM) {
             Log.d(TAG, "Got unexpected permission result: " + requestCode);
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             return;
@@ -302,7 +302,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements I
                 getApplicationContext());
         if (code != ConnectionResult.SUCCESS) {
             Dialog dlg =
-                    GoogleApiAvailability.getInstance().getErrorDialog(this, code, RC_HANDLE_GMS);
+                    GoogleApiAvailability.getInstance().getErrorDialog(this, code, IntentNames.RC_HANDLE_GMS);
             dlg.show();
         }
 
@@ -323,8 +323,6 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements I
      * @return true if the activity is ending.
      */
     private boolean onTap() {
-
-        //TODO: use the tap position to select the barcode.
         BarcodeGraphic graphic = mGraphicOverlay.getFirstGraphic();
         Barcode barcode = null;
         if (graphic != null) {
@@ -336,7 +334,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements I
                 finish();
             }
             else {
-                Snackbar.make(mGraphicOverlay,"Wait until the app displays overlay then click the camera",Snackbar.LENGTH_LONG).show();
+                Snackbar.make(mGraphicOverlay, "Wait until the app displays overlay then click the camera button", Snackbar.LENGTH_LONG).show();
             }
         }
         else {

@@ -37,7 +37,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import aegis.com.aegis.R;
 import aegis.com.aegis.adapter.AutoCompleteAdapter;
-import aegis.com.aegis.logic.Location;
+import aegis.com.aegis.logic.CustomLocation;
 import aegis.com.aegis.logic.Places_Impl;
 import aegis.com.aegis.utility.ApiClientProvider;
 import aegis.com.aegis.utility.DismissKeyboard;
@@ -67,8 +67,6 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
 
     private static Spanned formatPlaceDetails(Resources res, CharSequence name, String gps,
                                               CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
-        Log.e(TAG, res.getString(R.string.place_details, name, gps, address, phoneNumber,
-                                 websiteUri));
         return Html.fromHtml(res.getString(R.string.place_details, name, gps, address, phoneNumber,
                                            websiteUri));
 
@@ -89,8 +87,7 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
                              Bundle savedInstanceState) {
 
         reciever = this.getArguments();
-        if (!mGoogleApiClient.isConnected())
-            mGoogleApiClient = ApiClientProvider.getInstance(this, getActivity());
+        mGoogleApiClient = ApiClientProvider.getInstance(this, getActivity());
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_places, container, false);
         // Retrieve the AutoCompleteTextView that will display Place_Abs suggestions.
@@ -121,12 +118,12 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
 
         OpenMapButton.setEnabled(false);
 
+        SetProperties();
+
         if(reciever != null) {
             data = reciever.getString(IntentNames.Search_View_KEY, null);
             mAutocompleteView.setText(data);
         }
-
-        SetProperties();
 
         return root;
     }
@@ -206,19 +203,14 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
               */
         final AutocompletePrediction item = mAdapter.getItem(position);
         final String placeId = item.getPlaceId();
-        final CharSequence primaryText = item.getPrimaryText(null);
 
-        Log.i(TAG, "Autocomplete item selected: " + primaryText);
-
-            /*
-             Issue a request to the Places Geo Data API to retrieve a Place_Abs object with additional
-             details about the place.
-              */
+        /*
+         Issue a request to the Places Geo Data API to retrieve a Place_Abs object with additional
+         details about the place.
+          */
         PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
                 .getPlaceById(mGoogleApiClient, placeId);
         placeResult.setResultCallback(this);
-
-        Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
     }
 
     /**
@@ -230,19 +222,18 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
         if (!places.getStatus().isSuccess()) {
             // Request did not complete successfully
             Toast.makeText(getActivity(), "Place query did not complete. Error: " + places.getStatus().toString(), Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
             places.release();
             return;
         }
-        // Get the Place object from the buffer.
-        final com.google.android.gms.location.places.Place place = places.get(0);
-
         //Dismiss the keyboard when we select an item.
         DismissKeyboard.hideSoftKeyboard(getActivity());
 
+        // Get the Place object from the buffer.
+        final com.google.android.gms.location.places.Place place = places.get(0);
+
         desired_place = new Places_Impl(
                 place.getId(),
-                new Location(String.valueOf(place.getName()), place.getLatLng().latitude, place.getLatLng().longitude)
+                new CustomLocation(String.valueOf(place.getName()), place.getLatLng().latitude, place.getLatLng().longitude)
                 , String.valueOf(place.getAddress()), place.getRating(), String.valueOf(place.getWebsiteUri()), String.valueOf(place.getAddress())
         );
 

@@ -33,12 +33,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:textColor="@color/colorWhiteText"
             android:layout_toLeftOf="@+id/button_clear"
             android:layout_toStartOf="@+id/button_clear"
             android:hint="@string/autocomplete_hint"
             android:imeOptions="actionDone|flagNoExtractUi"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:textColor="@color/colorWhiteText"/>
     <ImageButton
         android:id="@+id/button_clear"
         android:layout_width="wrap_content"
@@ -48,24 +48,6 @@
         android:layout_alignParentRight="true"
         android:layout_margin="5dp"
         android:src="@drawable/ic_dismiss"/>
-</RelativeLayout>
-
-<RelativeLayout
-    android:layout_marginTop="20dp"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_google_plus"
-        android:layout_alignParentLeft="true"/>
-
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@mipmap/ic_launcher"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"/>
 </RelativeLayout>
 
         <Button

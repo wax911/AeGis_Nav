@@ -8,17 +8,29 @@ import java.io.Serializable;
 public abstract class Place_Abs implements Serializable
 {
     private String place_id;
-    private Location place_cord;
+    private CustomLocation place_cord;
     private String place_address;
     private float place_rating;
     private String place_website;
     private String place_contact;
 
-    public Location getPlace_cord() {
+    public Place_Abs(String place_id, CustomLocation place_cord, String place_address, float place_rating, String place_website, String place_contact) {
+        this.place_id = place_id;
+        this.place_cord = place_cord;
+        this.place_address = place_address;
+        this.place_rating = place_rating;
+        this.place_website = place_website;
+        this.place_contact = place_contact;
+    }
+
+    public Place_Abs() {
+    }
+
+    public CustomLocation getPlace_cord() {
         return place_cord;
     }
 
-    public void setPlace_cord(Location place_cord) {
+    public void setPlace_cord(CustomLocation place_cord) {
         this.place_cord = place_cord;
     }
 
@@ -60,17 +72,5 @@ public abstract class Place_Abs implements Serializable
 
     public void setPlace_contact(String place_contact) {
         this.place_contact = place_contact;
-    }
-
-    public Place_Abs(String place_id, Location place_cord, String place_address, float place_rating, String place_website, String place_contact) {
-        this.place_id = place_id;
-        this.place_cord = place_cord;
-        this.place_address = place_address;
-        this.place_rating = place_rating;
-        this.place_website = place_website;
-        this.place_contact = place_contact;
-    }
-
-    public Place_Abs() {
     }
 }

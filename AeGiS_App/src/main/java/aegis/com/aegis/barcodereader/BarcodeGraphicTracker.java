@@ -15,6 +15,9 @@
  */
 package aegis.com.aegis.barcodereader;
 
+import android.content.Intent;
+
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -43,6 +46,12 @@ class BarcodeGraphicTracker extends Tracker<Barcode> {
     @Override
     public void onNewItem(int id, Barcode item) {
         mGraphic.setId(id);
+        if (!ActivitySource.isAuto) return;
+        Intent data = new Intent();
+        data.putExtra("Barcode", item);
+        ActivitySource.caller.setResult(CommonStatusCodes.SUCCESS, data);
+        ActivitySource.caller.finish();
+        ActivitySource.caller = null;
     }
 
     /**
@@ -53,8 +62,6 @@ class BarcodeGraphicTracker extends Tracker<Barcode> {
         mOverlay.add(mGraphic);
         mGraphic.updateItem(item);
         //do something that assures that we don't have to wait for the barcode scanner to gain focus and wait for a click
-        //Location l = new Location(null,item.geoPoint.lat,item.geoPoint.lng);
-
     }
 
     /**

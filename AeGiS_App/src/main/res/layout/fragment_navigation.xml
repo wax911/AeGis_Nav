@@ -10,6 +10,7 @@
         layout="@layout/toolbar_maps"
         />
 
+
     <fragment
         android:id="@+id/mapView"
         class="com.google.android.gms.maps.SupportMapFragment"
@@ -40,6 +41,19 @@
 
             app:rippleColor="@color/fab_ripple"/>
     </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"/>
+    </LinearLayout>
 
 </FrameLayout>
 

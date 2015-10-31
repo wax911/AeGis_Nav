@@ -5,7 +5,6 @@ package aegis.com.aegis.utility;
  */
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -21,7 +20,7 @@ public class CityPreference {
     // If the user has not chosen a city yet, return
     // Sydney as the default city
     public String getCity() {
-        return prefs.getString("city", "Pretoria");
+        return prefs.getString("city", "Johannesburg");
     }
 
     public void setCity(String city)

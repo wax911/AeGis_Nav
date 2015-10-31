@@ -33,7 +33,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 
 import aegis.com.aegis.R;
 import aegis.com.aegis.barcodereader.BarcodeCaptureActivity;
-import aegis.com.aegis.logic.Location;
+import aegis.com.aegis.logic.CustomLocation;
 import aegis.com.aegis.logic.User;
 import aegis.com.aegis.utility.AsyncRunner;
 import aegis.com.aegis.utility.DismissKeyboard;
@@ -42,8 +42,7 @@ import aegis.com.aegis.utility.IntentNames;
 import aegis.com.aegis.utility.Notifier;
 
 
-
-public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, SearchView.OnQueryTextListener, Animation.AnimationListener
+public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, SearchView.OnQueryTextListener, Animation.AnimationListener
 {
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static String TAG = MainActivity.class.getSimpleName();
@@ -59,7 +58,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private Fragment fragment = null;
     private SearchView searchbar;
     private Intent action = null;
-    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,14 +67,32 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         user = (User) getIntent().getSerializableExtra("user_profile");
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        spin = AnimationUtils.loadAnimation(this, R.anim.rotate_it);
+        spin.setAnimationListener(this);
+
         fab = (FloatingActionButton) findViewById(R.id.fab_QR);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ((android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP))
+                    fab.startAnimation(spin);
+                else
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            synchronized (this) {
+                                startActivityForResult(new Intent(MainActivity.this, BarcodeCaptureActivity.class), RC_BARCODE_CAPTURE);
+                            }
+                        }
+                    }).start();
+
+            }
+        });
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarColor));
         }
-
-        spin = AnimationUtils.loadAnimation(this, R.anim.rotate_it);
-        spin.setAnimationListener(this);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -89,10 +105,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
 
-
         InitUserElements();
-
-        fab.setOnClickListener(this);
 
         if(savedInstanceState == null) {
             // display the first navigation drawer view on app launch
@@ -137,6 +150,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         searchbar.setOnQueryTextListener(this);
         // Configure the search info and add any event listeners
         searchbar.setSubmitButtonEnabled(true);
+        searchbar.setIconifiedByDefault(true);
         return true;
     }
 
@@ -161,7 +175,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
 
         if(id == R.id.action_search){
-            Toast.makeText(getApplicationContext(), "Search action is selected!", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -180,7 +193,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
     private void displayView(int position) {
-
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
@@ -223,19 +235,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         super.onDestroy();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.fab_QR:
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-                    fab.startAnimation(spin);
-                else
-                    onAnimationEnd(null);
-                break;
-        }
-    }
-
     /**
      * Called when an activity you launched exits, giving you the requestCode
      * you started it with, the resultCode it returned, and any additional
@@ -270,7 +269,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                                     action = new Intent(MainActivity.this,NavigationActivity.class);
                                     final double lat = barcode.geoPoint.lat;
                                     final double lng = barcode.geoPoint.lng;
-                                    action.putExtra(IntentNames.MAP_INTENT_KEY, new Location("Place", lat, lng));
+                                    action.putExtra(IntentNames.MAP_INTENT_KEY, new CustomLocation("Place", lat, lng));
                                     startActivity(action);
                                     break;
                                 case Barcode.EMAIL:
@@ -322,9 +321,16 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         info.putString(IntentNames.Search_View_KEY, query);
         DismissKeyboard.hideSoftKeyboard(this);
         searchbar.setIconified(true);
+        fragment = new PlacesFragment();
+        fragment.setArguments(info);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_body, fragment);
+        fragmentTransaction.commit();
+        // set the toolbar title
+        getSupportActionBar().setTitle(getString(R.string.title_places));
         searchbar.clearFocus();
-        //fragment.setArguments(info);
-        displayView(1);
         return true;
     }
 
@@ -335,13 +341,19 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onAnimationStart(Animation animation) {
-        // launch barcode activity.
-        intent = new Intent(MainActivity.this, BarcodeCaptureActivity.class);
+
     }
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        startActivityForResult(intent, RC_BARCODE_CAPTURE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (this) {
+                    startActivityForResult(new Intent(getApplication(), BarcodeCaptureActivity.class), RC_BARCODE_CAPTURE);
+                }
+            }
+        }).start();
     }
 
     @Override

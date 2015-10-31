@@ -5,13 +5,22 @@ package aegis.com.aegis.logic;
  */
 public class Places_Impl extends Place_Abs
 {
+    public Places_Impl(String place_id, CustomLocation place_cord, String place_address, float place_rating, String place_website, String place_contact) {
+        super(place_id, place_cord, place_address, place_rating, place_website, place_contact);
+    }
+
+    public Places_Impl() {
+        super();
+
+    }
+
     @Override
-    public Location getPlace_cord() {
+    public CustomLocation getPlace_cord() {
         return super.getPlace_cord();
     }
 
     @Override
-    public void setPlace_cord(Location place_cord) {
+    public void setPlace_cord(CustomLocation place_cord) {
         super.setPlace_cord(place_cord);
     }
 
@@ -63,15 +72,5 @@ public class Places_Impl extends Place_Abs
     @Override
     public void setPlace_contact(String place_contact) {
         super.setPlace_contact(place_contact);
-    }
-
-    public Places_Impl(String place_id, Location place_cord, String place_address, float place_rating, String place_website, String place_contact) {
-        super(place_id, place_cord, place_address, place_rating, place_website, place_contact);
-    }
-
-    public Places_Impl()
-    {
-        super();
-
     }
 }
