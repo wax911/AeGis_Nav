@@ -42,7 +42,7 @@ import aegis.com.aegis.utility.IntentNames;
 import aegis.com.aegis.utility.Notifier;
 
 
-public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, SearchView.OnQueryTextListener, Animation.AnimationListener
+public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, SearchView.OnQueryTextListener, Animation.AnimationListener, View.OnClickListener
 {
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static String TAG = MainActivity.class.getSimpleName();
@@ -68,27 +68,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        fab = (FloatingActionButton)findViewById(R.id.fab_QR);
         spin = AnimationUtils.loadAnimation(this, R.anim.rotate_it);
         spin.setAnimationListener(this);
-
-        fab = (FloatingActionButton) findViewById(R.id.fab_QR);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ((android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP))
-                    fab.startAnimation(spin);
-                else
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            synchronized (this) {
-                                startActivityForResult(new Intent(MainActivity.this, BarcodeCaptureActivity.class), RC_BARCODE_CAPTURE);
-                            }
-                        }
-                    }).start();
-
-            }
-        });
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.navigationBarColor));
@@ -107,6 +89,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         InitUserElements();
 
+        fab.setOnClickListener(this);
+
         if(savedInstanceState == null) {
             // display the first navigation drawer view on app launch
             displayView(0);
@@ -118,7 +102,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     {
         Username = (TextView)findViewById(R.id.nav_greeting);
         profile_pic = (ImageView) findViewById(R.id.header_profile);
-
+        fab = (FloatingActionButton) findViewById(R.id.fab_QR);
         if (user != null) {
             if (applicationSettings.getString("example_text", "User") != user.getFullname())
                 _editor.putString("example_text", user.getFullname());
@@ -346,18 +330,34 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (this) {
-                    startActivityForResult(new Intent(getApplication(), BarcodeCaptureActivity.class), RC_BARCODE_CAPTURE);
-                }
-            }
-        }).start();
+        // launch barcode activity.
+        Intent intent = new Intent(this, BarcodeCaptureActivity.class);
+        startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
 
     @Override
     public void onAnimationRepeat(Animation animation) {
 
+    }
+
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.fab_QR:
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    fab.startAnimation(spin);
+                }
+                else
+                {
+                    onAnimationEnd(spin);
+                }
+                break;
+        }
     }
 }

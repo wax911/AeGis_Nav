@@ -239,8 +239,8 @@ public class NavigationActivity extends ActionBarActivity implements OnMapReadyC
                 attributions = "";
             }
             Toast.makeText(this,name+" "+address+Html.fromHtml(attributions),Toast.LENGTH_LONG).show();
-
-            destinationM = mMap.addMarker(new MarkerOptions()
+            if(place == null) super.onActivityResult(requestCode, resultCode, data);
+                destinationM = mMap.addMarker(new MarkerOptions()
                                                   .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_usermarker))
                                                   .title("Your Destination")
                                                   .position(place.getLatLng())

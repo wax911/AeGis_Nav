@@ -35,5 +35,4 @@
     <style name="Theme.Sample" parent="Theme.Base" />
 
     <style name="PlacesTheme" parent="Theme.Sample" />
-
 </resources>
