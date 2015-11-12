@@ -2,14 +2,24 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditTextPreference
-        android:capitalize="words"
-        android:defaultValue="Google"
-        android:inputType="textCapWords"
+        android:defaultValue="58:17:0c:47:48:d4"
+        android:inputType="textNoSuggestions"
         android:key="pref_provider"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="The name of the Map Provider"/>
+        android:title="Mac Address"
+        android:summary="The mac address of the device to listen for. If not sure, add the name of the hotspot below"/>
+
+    <EditTextPreference
+        android:defaultValue="Xperia Mini"
+        android:inputType="textNoSuggestions"
+        android:key="pref_provider_name"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Name of Hotspot"
+        android:summary="Name of the wifi connection to look out for. If this is set you will not need to set the Mac address."/>
 
     <CheckBoxPreference
         android:defaultValue="false"

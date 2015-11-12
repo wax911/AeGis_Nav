@@ -14,7 +14,8 @@ public class CityPreference {
     private SharedPreferences.Editor _editor;
 
     public CityPreference(Activity activity) {
-        prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        if(activity != null)
+            prefs = PreferenceManager.getDefaultSharedPreferences(activity);
     }
 
     // If the user has not chosen a city yet, return

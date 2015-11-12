@@ -1,6 +1,8 @@
 package aegis.com.aegis.Data;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -17,11 +19,55 @@ import java.io.OutputStream;
 public class DBHelper extends SQLiteOpenHelper
 {
 
-    private static final String dbName = "";
+    private static final String dbName = "AeGisDB.db";
     private static final String dbPath = "/data/data/aegis.com.aegisnav/databases/";
     private SQLiteDatabase appDB;
     private final Context appContext;
+    private Cursor columnGetter;
 
+    public synchronized boolean InsertItems(String Table, ContentValues values)
+    {
+        boolean result;
+        result = appDB.insert(Table,"default",values) > 0;
+        return result;
+    }
+
+    public synchronized boolean UpdateItems(String Table, ContentValues values)
+    {
+        boolean result;
+        openDataBase(true);
+        //return something besides 0 if the query worked
+        result = appDB.update(Table,values,filterColumn(Table)+" = ?",new String[]{"1"}) > 0;
+        return result;
+    }
+
+    public synchronized Cursor SelectItems(String Table)
+    {
+        Cursor cursor = appDB.query(Table,new String[]{"*"},null,null,null,null,null);
+        return cursor;
+    }
+
+    public synchronized boolean DeleteItems(String Table, String id)
+    {
+        boolean result;
+        openDataBase(true);
+        result = appDB.delete(Table,filterColumn(Table)+" = ?",new String[]{id}) > 0;
+        close();
+        return result;
+    }
+
+    /*
+    * Gets the column name at position 0 which is the id of any table
+    * That will be used when updating or deleting
+    * */
+    private String filterColumn(String table)
+    {
+        openDataBase(false);
+        columnGetter = appDB.rawQuery("SELECT * FROM "+table+" LIMIT 1",null);
+        String result = columnGetter.getColumnName(0);
+        close();
+        return result;
+    }
 
     /**
      * Called when the database is created for the first time. This is where the
@@ -41,7 +87,7 @@ public class DBHelper extends SQLiteOpenHelper
     /**
      * Creates a empty database on the system and rewrites it with your own database.
      * */
-    public void createDataBase() throws IOException{
+    public synchronized void createDataBase() throws IOException{
 
         boolean dbExist = checkDataBase();
 
@@ -62,14 +108,14 @@ public class DBHelper extends SQLiteOpenHelper
             }
         }
         else
-            openDataBase();
+            openDataBase(false);
     }
 
     /**
      * Check if the database already exist to avoid re-copying the file each time you open the application.
      * @return true if it exists, false if it doesn't
      */
-    private boolean checkDataBase(){
+    private synchronized boolean checkDataBase(){
 
         SQLiteDatabase checkDB = null;
 
@@ -97,7 +143,7 @@ public class DBHelper extends SQLiteOpenHelper
      * system folder, from where it can be accessed and handled.
      * This is done by transfering bytestream.
      * */
-    private void copyDataBase() throws IOException {
+    private synchronized void copyDataBase() throws IOException {
 
         //Open your local db as the input stream
         InputStream is = appContext.getAssets().open(dbName);
@@ -122,12 +168,13 @@ public class DBHelper extends SQLiteOpenHelper
 
     }
 
-    public void openDataBase() throws SQLException {
-
+    public synchronized void openDataBase(boolean mode) throws SQLException {
         //Open the database
         String myPath = dbPath + dbName;
-        appDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-
+        if(mode)
+            appDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+        else
+            appDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
     }
 
     @Override
@@ -163,10 +210,8 @@ public class DBHelper extends SQLiteOpenHelper
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        //super.onUpgrade(db);
     }
-
-
 
     /*
     * Default constructor which will take current application context

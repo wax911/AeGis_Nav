@@ -5,7 +5,14 @@ package aegis.com.aegis.Data;
  */
 public interface ICommon
 {
-    String[] Tables = {"","","","","",""};
+    enum TableNames {
+        Favourites ,
+        Location,
+        Place,
+        User,
+        UserFeedback,
+        WAP
+    }
 
-
+    String[] Tables = {"Favourites","Location","Place","User","UserFeedback","WAP"};
 }

@@ -12,7 +12,7 @@ android {
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
 
-        versionName '1.2'
+        versionName '1.401'
     }
     buildTypes {
         release {
@@ -21,6 +21,8 @@ android {
         }
     }
     productFlavors {
+    }
+    dexOptions {
     }
 }
 

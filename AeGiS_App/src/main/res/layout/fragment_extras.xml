@@ -1,41 +1,32 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="@drawable/floor_plan_mp">
+             android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <include layout="@layout/loading_bar"/>
-
-    <RelativeLayout
-        android:id="@+id/rect"
+    <android.support.v7.widget.CardView
+        android:layout_marginTop="0dp"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardElevation="15dp"
+        app:cardBackgroundColor="@color/blue_grey_800">
+    <TextView
+        android:id="@+id/extrasHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:textSize="30sp"
+        android:text="@string/history"
+        android:typeface="serif"
+        />
+    </android.support.v7.widget.CardView>
 
-    </RelativeLayout>
-
-    <FrameLayout
-        android:id="@+id/contain"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_wifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|bottom"
-            android:layout_margin="@dimen/fab_compat_margin"
-            android:src="@drawable/ic_cast_dark"
-            app:backgroundTint="@color/fab_tint"
-            app:elevation="6dp"
-            app:pressedTranslationZ="12dp"
-            app:rippleColor="@color/fab_ripple"/>
-
-    </FrameLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/historyList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"/>
 
 
 </FrameLayout>

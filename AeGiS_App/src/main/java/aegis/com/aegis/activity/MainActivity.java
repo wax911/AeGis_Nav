@@ -1,6 +1,8 @@
 package aegis.com.aegis.activity;
 
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -24,6 +26,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,18 +35,21 @@ import android.widget.Toast;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import aegis.com.aegis.Data.DBHelper;
 import aegis.com.aegis.R;
 import aegis.com.aegis.barcodereader.BarcodeCaptureActivity;
 import aegis.com.aegis.logic.CustomLocation;
 import aegis.com.aegis.logic.User;
+import aegis.com.aegis.utility.AlertManager;
 import aegis.com.aegis.utility.AsyncRunner;
 import aegis.com.aegis.utility.DismissKeyboard;
+import aegis.com.aegis.utility.Email;
 import aegis.com.aegis.utility.ImageStore;
 import aegis.com.aegis.utility.IntentNames;
 import aegis.com.aegis.utility.Notifier;
 
 
-public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, SearchView.OnQueryTextListener, Animation.AnimationListener, View.OnClickListener
+public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, SearchView.OnQueryTextListener, Animation.AnimationListener, View.OnClickListener, DialogInterface.OnClickListener
 {
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static String TAG = MainActivity.class.getSimpleName();
@@ -58,6 +65,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private Fragment fragment = null;
     private SearchView searchbar;
     private Intent action = null;
+    private DBHelper da;
+    private Button btnrr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +74,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         setContentView(R.layout.activity_main);
 
         user = (User) getIntent().getSerializableExtra("user_profile");
+
+        da = new DBHelper(this);
+        da.onCreate(null);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -95,6 +107,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             // display the first navigation drawer view on app launch
             displayView(0);
         }
+    }
+
+    /**
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
+     */
+    @Override
+    public void onBackPressed() {
+        new AlertManager(this,this).Create("Sign Out?","You have hit the back button, and this action will sign you out of the application. continue with this action? If not Tap anywhere on the screen.",true);
     }
 
     //Load names and images for the user
@@ -164,7 +185,24 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         if (id == R.id.action_feedback)
         {
-            Toast.makeText(getApplicationContext(), "Send Feedback!", Toast.LENGTH_SHORT).show();
+            final Dialog dialog = new Dialog(MainActivity.this);
+            dialog.setContentView(R.layout.dialog_box);
+            dialog.setTitle("Send Feedback");
+
+            btnrr = (Button) dialog.findViewById(R.id.btn_feedback);
+            final EditText subject = (EditText) dialog.findViewById(R.id.txt_subject);
+            final EditText message = (EditText) dialog.findViewById(R.id.txt_message);
+
+            btnrr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Email m = new Email(MainActivity.this);
+                    m.sendEmail(subject.getText().toString(), message.getText().toString());
+                    dialog.dismiss();
+
+                }
+            });
+            dialog.show();
             return true;
         }
 
@@ -215,7 +253,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     protected void onDestroy() {
         //attempt to clean up resources
         profile_pic.setImageBitmap(null);
-
         super.onDestroy();
     }
 
@@ -255,6 +292,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                                     final double lng = barcode.geoPoint.lng;
                                     action.putExtra(IntentNames.MAP_INTENT_KEY, new CustomLocation("Place", lat, lng));
                                     startActivity(action);
+                                    break;
+                                case Barcode.TEXT:
+                                    Toast.makeText(getApplicationContext(),intentData,Toast.LENGTH_LONG).show();
                                     break;
                                 case Barcode.EMAIL:
                                     //start intent to give a list of emailing apps
@@ -359,5 +399,21 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 }
                 break;
         }
+    }
+
+    /**
+     * This method will be invoked when a button in the dialog is clicked.
+     *
+     * @param dialog The dialog that received the click.
+     * @param which  The button that was clicked (e.g.
+     *               {@link DialogInterface#BUTTON1}) or the position
+     */
+    @Override
+    public void onClick(DialogInterface dialog, int which)
+    {
+        dialog.dismiss();
+        if(fragment != null)
+            fragment.onStop();
+        finish();
     }
 }

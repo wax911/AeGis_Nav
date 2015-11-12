@@ -1,5 +1,6 @@
 package aegis.com.aegis.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -35,6 +36,8 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import aegis.com.aegis.Data.DataAccess;
+import aegis.com.aegis.Data.ICommon;
 import aegis.com.aegis.R;
 import aegis.com.aegis.adapter.AutoCompleteAdapter;
 import aegis.com.aegis.logic.CustomLocation;
@@ -64,6 +67,7 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
     private RatingBar mRating;
     private TextView mPlaceDetailsText;
     private TextView mPlaceDetailsAttribution;
+    private ProgressDialog progressDialog;
 
     private static Spanned formatPlaceDetails(Resources res, CharSequence name, String gps,
                                               CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
@@ -162,6 +166,8 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
     public void onDetach()
     {
         super.onDetach();
+        if(mGoogleApiClient.isConnected())
+            mGoogleApiClient.disconnect();
         mGoogleApiClient = null;
     }
 
@@ -174,6 +180,7 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
                 mAutocompleteView.setText("");
                 break;
             case R.id.open_inmap:
+                new DataAccess(getContext()).AddHistory(ICommon.TableNames.Place,desired_place);
                 startActivity(new Intent(getActivity(), NavigationActivity.class).putExtra(IntentNames.MAP_INTENT_KEY, desired_place.getPlace_cord()));
                 break;
             default:
@@ -195,7 +202,10 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+    {
+        progressDialog = ProgressDialog.show(getActivity(), "Please wait.",
+                                             "Fetching your result info", true);
         /*
              Retrieve the place ID of the selected item from the Adapter.
              The adapter stores each Place_Abs suggestion in a AutocompletePrediction from which we
@@ -232,9 +242,9 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
         final com.google.android.gms.location.places.Place place = places.get(0);
 
         desired_place = new Places_Impl(
-                place.getId(),
+                place.getId(),String.valueOf(place.getName()),
                 new CustomLocation(String.valueOf(place.getName()), place.getLatLng().latitude, place.getLatLng().longitude)
-                , String.valueOf(place.getAddress()), place.getRating(), String.valueOf(place.getWebsiteUri()), String.valueOf(place.getAddress())
+                , String.valueOf(place.getAddress()), place.getRating(), String.valueOf(place.getWebsiteUri()), String.valueOf(place.getPhoneNumber())
         );
 
 
@@ -261,5 +271,6 @@ public class PlacesFragment extends android.support.v4.app.Fragment implements G
         }
 
         places.release();
+        progressDialog.dismiss();
     }
 }

@@ -5,13 +5,27 @@ package aegis.com.aegis.logic;
  */
 public class Places_Impl extends Place_Abs
 {
-    public Places_Impl(String place_id, CustomLocation place_cord, String place_address, float place_rating, String place_website, String place_contact) {
-        super(place_id, place_cord, place_address, place_rating, place_website, place_contact);
+    public Places_Impl(String place_id, String place_name, CustomLocation place_cord, String place_address, float place_rating, String place_website, String place_contact) {
+        super(place_id, place_name, place_cord, place_address, place_rating, place_website, place_contact);
+    }
+
+    public Places_Impl(String place_name, CustomLocation place_cord, String place_address, float place_rating, String place_website, String place_contact) {
+        super(place_name,place_cord, place_address, place_rating, place_website, place_contact);
     }
 
     public Places_Impl() {
         super();
 
+    }
+
+    @Override
+    public String getPalce_name() {
+        return super.getPalce_name();
+    }
+
+    @Override
+    public void setPalce_name(String palce_name) {
+        super.setPalce_name(palce_name);
     }
 
     @Override

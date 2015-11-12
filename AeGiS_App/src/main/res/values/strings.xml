@@ -10,7 +10,7 @@
     <string name="nav_item_home">Home</string>
     <string name="nav_item_placess">Places</string>
     <string name="nav_item_navigation">Navigation</string>
-    <string name="nav_item_extras">Extras</string>
+    <string name="nav_item_extras">History</string>
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
@@ -29,7 +29,7 @@
     <string name="title_navigation">Navigation</string>
     <string name="title_barcodes">QR/Barcode Scanner</string>
     <string name="title_home">Home</string>
-    <string name="title_extras">Extras</string>
+    <string name="title_extras">History</string>
     <string name="title_places">Places</string>
 
     <string name="hello_world">Hello world!</string>
@@ -208,5 +208,6 @@
 
     <string name="place_not_found">Sorry, no weather data found.</string>
     <string name="LocationMsg">Please allow our app to take you to location settings and please assure that they are enabled to get the best out of the app.</string>
+    <string name="history">History</string>
 
 </resources>

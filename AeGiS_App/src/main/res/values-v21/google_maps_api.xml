@@ -4,15 +4,15 @@
 
     To get one, follow this link, follow the directions and press "Create" at the end:
 
-https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=A5:0C:EE:2F:8C:0C:FD:9D:FB:08:5E:7A:FC:75:1F:28:B3:02:65:D3%3Baegis.com.aegis.activity
+https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=8A:62:B5:4C:A2:46:EE:3D:0D:57:89:12:FE:AA:50:3C:2E:F0:09:FF%3Baegis.com.aegisnav
 
     You can also add your credentials to an existing key, using this line:
-    A5:0C:EE:2F:8C:0C:FD:9D:FB:08:5E:7A:FC:75:1F:28:B3:02:65:D3;aegis.com.aegisnav
+    8A:62:B5:4C:A2:46:EE:3D:0D:57:89:12:FE:AA:50:3C:2E:F0:09:FF;aegis.com.aegisnav
 
     Once you have your key (it starts with "AIza"), replace the "google_maps_key"
     string in this file.
     -->
-    <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">
-        AIzaSyBFWElwDnyvDoeM_7NOgIAI85ijinrq18U
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+            AIzaSyAOtY8AmiNMWpA8l-MqbytAywBSoFqJVfY
     </string>
 </resources>

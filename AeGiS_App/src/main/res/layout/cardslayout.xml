@@ -9,9 +9,11 @@
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
         card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="15dp"
+        card_view:cardBackgroundColor="@color/blue_grey_900"
         card_view:contentPadding="10dp">
 
         <RelativeLayout
@@ -19,19 +21,45 @@
             android:layout_height="fill_parent">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/plname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:layout_alignParentTop="true"/>
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/pladdress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_below="@+id/textView"/>
+                android:layout_below="@+id/plname"/>
+
+            <TextView
+                android:id="@+id/plwebsite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_below="@+id/pladdress"
+                />
+
+            <TextView
+                android:id="@+id/plnumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/plwebsite"/>
+
+            <Button
+                android:id="@+id/revisit_btn"
+                android:theme="@style/ThemeOverlay.MyDarkButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Revisit"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/plnumber"
+                />
+
         </RelativeLayout>
+
     </android.support.v7.widget.CardView>
 
 

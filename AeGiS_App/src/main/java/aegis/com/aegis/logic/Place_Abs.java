@@ -8,14 +8,25 @@ import java.io.Serializable;
 public abstract class Place_Abs implements Serializable
 {
     private String place_id;
+    private String palce_name;
     private CustomLocation place_cord;
     private String place_address;
     private float place_rating;
     private String place_website;
     private String place_contact;
 
-    public Place_Abs(String place_id, CustomLocation place_cord, String place_address, float place_rating, String place_website, String place_contact) {
+    public Place_Abs(String place_id, String place_name, CustomLocation place_cord, String place_address, float place_rating, String place_website, String place_contact) {
         this.place_id = place_id;
+        this.palce_name = place_name;
+        this.place_cord = place_cord;
+        this.place_address = place_address;
+        this.place_rating = place_rating;
+        this.place_website = place_website;
+        this.place_contact = place_contact;
+    }
+
+    public Place_Abs(String place_name, CustomLocation place_cord, String place_address, float place_rating, String place_website, String place_contact) {
+        this.palce_name = place_name;
         this.place_cord = place_cord;
         this.place_address = place_address;
         this.place_rating = place_rating;
@@ -72,5 +83,13 @@ public abstract class Place_Abs implements Serializable
 
     public void setPlace_contact(String place_contact) {
         this.place_contact = place_contact;
+    }
+
+    public String getPalce_name() {
+        return palce_name;
+    }
+
+    public void setPalce_name(String palce_name) {
+        this.palce_name = palce_name;
     }
 }

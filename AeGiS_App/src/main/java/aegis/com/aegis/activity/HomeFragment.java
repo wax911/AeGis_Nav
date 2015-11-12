@@ -83,10 +83,17 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         provider = new LastLocationProvider(getContext(), this);
     }
 
-    private void updateWeatherData() {
+    public void updateWeatherData() {
         new Thread() {
             public void run() {
-                final JSONObject json = RemoteFetch.getJSON(new CityPreference(getActivity()).getCity());
+                String city = null;
+                try {
+                    city = new CityPreference(getActivity()).getCity();
+                }catch (Exception e)
+                {
+                    Log.e("City Obtain",e.getMessage());
+                }
+                final JSONObject json = RemoteFetch.getJSON(city);
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
@@ -223,10 +230,9 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         mylocation = provider.Retreive();
 
         Geocoder gcd = new Geocoder(getContext(), Locale.getDefault());
-        backgroundRunner = new AsyncFunction(mylocation, getActivity());
+        backgroundRunner = new AsyncFunction(mylocation, getActivity(),this);
         backgroundRunner.execute(gcd);
         Toast.makeText(getContext(), "Obtaining your CustomLocation, Please wait..", Toast.LENGTH_LONG).show();
-        updateWeatherData();
     }
 
     @Override
@@ -238,7 +244,6 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
     @Override
     public void onResume() {
         super.onResume();
-
         updateWeatherData();
     }
 }

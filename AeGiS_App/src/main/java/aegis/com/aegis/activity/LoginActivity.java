@@ -129,7 +129,6 @@ public class LoginActivity extends AppCompatActivity implements
         findViewById(R.id.sign_in_button).setEnabled(false);
 
         user = new User();
-
         // Set up view instances
         mStatus = (TextView) findViewById(R.id.status);
 
@@ -154,7 +153,7 @@ public class LoginActivity extends AppCompatActivity implements
 
         if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 !lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-            new AlertManager(this, this).Create("Location Services Disabled", this.getString(R.string.LocationMsg));
+            new AlertManager(this, this).Create("Location Services Disabled", this.getString(R.string.LocationMsg),false);
     }
 
     private void updateUI(boolean isSignedIn){
@@ -441,6 +440,11 @@ public class LoginActivity extends AppCompatActivity implements
         if(imgtemp != null)
             imgtemp.recycle();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
     }
 
     // [START on_click]

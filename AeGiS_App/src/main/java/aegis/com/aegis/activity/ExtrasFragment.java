@@ -2,24 +2,29 @@ package aegis.com.aegis.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import aegis.com.aegis.Data.DataAccess;
+import aegis.com.aegis.Data.ICommon;
 import aegis.com.aegis.R;
-import aegis.com.aegis.utility.WiFiDemo;
+import aegis.com.aegis.adapter.HistoryAdapter;
+import aegis.com.aegis.logic.Places_Impl;
 
 
-public class ExtrasFragment extends Fragment implements  View.OnClickListener
-{
+public class ExtrasFragment extends Fragment {
 
-    private FloatingActionButton fab;
-    private WiFiDemo wifimanager;
-    private ProgressBar spinner;
-    /*LinearLayout mLinearLayout;*/
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private TextView heading;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,37 +36,22 @@ public class ExtrasFragment extends Fragment implements  View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_extras, container, false);
+        heading = (TextView)rootView.findViewById(R.id.extrasHeading);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.historyList);
+        mRecyclerView.setHasFixedSize(true);
+        mAdapter = new HistoryAdapter(getDataSet());
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
-        /*RelativeLayout layout = (RelativeLayout) rootView.findViewById(R.id.rect);
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
+        //heading.setText("No history!");
 
-
-        ImageView i = new ImageView(getActivity());
-        i.setImageResource(R.drawable.opacity);
-        i.setAdjustViewBounds(true);
-        i.setX(size.x / 2);
-        i.setY(size.y / 2);
-
-
-        layout.addView(i);*/
-
-        fab = (FloatingActionButton) rootView.findViewById(R.id.fab_wifi);
-        wifimanager =  new WiFiDemo(getActivity());
-        spinner = (ProgressBar)rootView.findViewById(R.id.loading);
-        spinner.setVisibility(View.VISIBLE);
-        fab.setOnClickListener(this);
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // if (wifimanager.receiver == null) {
-        //   wifimanager.onResume();
-        //}
-        //Need to sort this causing wifi to scan on start up
     }
 
     @Override
@@ -76,26 +66,14 @@ public class ExtrasFragment extends Fragment implements  View.OnClickListener
 
     }
 
+    private ArrayList<Places_Impl> getDataSet() {
+        DataAccess da = new DataAccess(getContext());
+        return da.GetAll(ICommon.TableNames.Place);
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
-        if (wifimanager.receiver != null) {
-            wifimanager.onStop();
-        }
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.fab_wifi:
-                wifimanager.setWiFiStatus();
-                wifimanager.onClick();
-                spinner.setVisibility(View.GONE);
-                break;
-            default:
-                break;
-        }
     }
 }
+

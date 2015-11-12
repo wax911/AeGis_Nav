@@ -14,25 +14,27 @@ public class AlertManager {
     private AlertDialog.Builder builder;
     private Activity active;
     private DialogInterface.OnClickListener event;
+    private boolean cancel;
 
     public AlertManager(Activity active, DialogInterface.OnClickListener event) {
         this.active = active;
         this.event = event;
     }
 
-    public void Create(String header, String body) {
+    public void Create(String header, String body, boolean autocancel) {
         // Build the alert dialog
         builder = new AlertDialog.Builder(active);
         builder.setTitle(header);
         builder.setMessage(body);
         builder.setIcon(R.drawable.navigation_icon);
         builder.setPositiveButton(R.string.ok, event);
+        cancel = autocancel;
         Build();
     }
 
     private void Build() {
         Dialog alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCanceledOnTouchOutside(cancel);
         alertDialog.show();
     }
 }

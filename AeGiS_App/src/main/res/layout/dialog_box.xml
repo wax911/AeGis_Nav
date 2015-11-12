@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/blue_grey_700">
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SEND FEEDBACK"
+        android:textColor="@color/colorWhiteText"
+        android:id="@+id/btn_feedback"
+        android:layout_below="@+id/txt_message"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="111dp"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_subject"
+        android:text=""
+        android:hint="Subject"
+        android:layout_marginTop="29dp"
+        android:inputType="textAutoCorrect"
+        android:capitalize="characters"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_message"
+        android:text=""
+        android:singleLine="false"
+        android:hint="Message"
+        android:layout_marginTop="28dp"
+        android:typeface="serif"
+        android:lines="5"
+        android:layout_below="@+id/txt_subject"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+<RadioGroup
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/txt_message"
+    android:layout_centerHorizontal="true">
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Navigation"
+        android:id="@+id/radioButton"
+        android:checked="true"/>
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Extras"
+        android:id="@+id/radioButton2"
+        android:checked="false"/>
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Places"
+        android:id="@+id/radioButton3"
+        android:checked="false"/>
+
+</RadioGroup>
+
+</RelativeLayout>

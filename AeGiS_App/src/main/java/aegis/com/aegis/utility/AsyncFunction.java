@@ -9,6 +9,8 @@ import android.os.AsyncTask;
 import java.io.IOException;
 import java.util.List;
 
+import aegis.com.aegis.activity.HomeFragment;
+
 /**
  * Created by Maxwell on 10/29/2015.
  */
@@ -17,16 +19,19 @@ public class AsyncFunction extends AsyncTask<Geocoder, Void, String> {
     private Location myloc;
     private Activity context;
     private int strike = 0;
+    private HomeFragment homeScreen;
 
-    public AsyncFunction(Location loc, Activity contx) {
+    public AsyncFunction(Location loc, Activity contx, HomeFragment homeFragment) {
         myloc = loc;
         context = contx;
+        homeScreen = homeFragment;
     }
 
     @Override
     protected String doInBackground(Geocoder... params) {
         List<Address> addresses = null;
         try {
+            if(myloc == null) return null;
             addresses = params[0].getFromLocation(myloc.getLatitude(), myloc.getLongitude(), 1);
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,7 +49,9 @@ public class AsyncFunction extends AsyncTask<Geocoder, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        if (s != null)
+        if (s != null) {
             new CityPreference(context).setCity(s);
+            homeScreen.updateWeatherData();
+        }
     }
 }
